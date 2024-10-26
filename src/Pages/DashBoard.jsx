@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Menu, Modal, Input } from 'antd';
 import { db } from "../Config/Firebase";
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 
 const DashBoard = () => {
   const navigate = useNavigate();
@@ -20,11 +20,20 @@ const DashBoard = () => {
 
   const handleCreateUser = async () => {
     try {
-      // Create a new user document in the 'Users' collection
-      await addDoc(collection(db, 'Users'), {
+      const usersRef = collection(db, 'Users');
+      const emailQuery = query(usersRef, where('email', '==', userEmail));
+      const querySnapshot = await getDocs(emailQuery);
+
+      if (!querySnapshot.empty) {
+        alert('User already exists!');
+        return;
+      }
+
+      await addDoc(usersRef, {
         email: userEmail,
-        password: userPassword, // Store passwords securely in practice
+        password: userPassword, 
       });
+
       setUserEmail('');
       setUserPassword('');
       setIsModalVisible(false);

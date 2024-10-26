@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { db } from "../Config/Firebase";
 import Image from "../Assets/Images/Sogaat_Photo-removebg-preview.png";
 import { Modal, Input } from 'antd';
@@ -13,13 +14,24 @@ const Login = () => {
     const [adminId, setAdminId] = useState('');
     const [loading, setLoading] = useState(false);
     const [newPassword, setNewPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
 
-    const pass = "admin1235"
+    const defaultAdminPassword = "admin1235";
+    
+    useEffect(() => {
+        // Initialize admin password in local storage if not already set
+        if (!localStorage.getItem('adminPassword')) {
+            localStorage.setItem('adminPassword', defaultAdminPassword);
+        }
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        if (email === "arham@gmail.com" && password === pass) {
+        const storedAdminPassword = localStorage.getItem('adminPassword');
+
+        if (email === "arham@gmail.com" && password === storedAdminPassword) {
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userPassword', password);
@@ -44,11 +56,10 @@ const Login = () => {
     };
 
     const handleForgotPassword = () => {
-        const adminIdToCheck = "admin123"; // Define your admin ID here
+        const adminIdToCheck = "admin123"; 
         if (adminId === adminIdToCheck) {
             if (newPassword) {
-                // Save the new password locally, or handle it as required
-                localStorage.setItem('adminPassword', newPassword); // Store it as an example
+                localStorage.setItem('adminPassword', newPassword); 
                 alert("Password updated successfully!");
             } else {
                 alert("Please enter a new password.");
@@ -57,8 +68,8 @@ const Login = () => {
         } else {
             alert("Incorrect Admin ID");
         }
-        setAdminId("")
-        setNewPassword("")
+        setAdminId("");
+        setNewPassword("");
     };
 
     return (
@@ -88,13 +99,22 @@ const Login = () => {
                             />
                         </div>
                         <label className="form-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-control mb-3"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="input-group mb-3">
+                            <input
+                                type={passwordVisible ? 'text' : 'password'}
+                                className="form-control"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span
+                                className="input-group-text"
+                                onClick={() => setPasswordVisible(!passwordVisible)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                {passwordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                            </span>
+                        </div>
                         <div className="mb-1 d-flex justify-content-end">
                             <label className="form-label">
                                 <span
