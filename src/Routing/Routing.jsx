@@ -1,20 +1,19 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Home from "../Pages/HomePage"
-import About from "../Pages/AboutPage"
-import Error from "../Pages/ErrorPage"
-
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Login from '../Auth/Login';
+import HomePage from '../Pages/HomePage';
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
+import Error from '../Pages/ErrorPage';
 
 const Routing = () => {
-  return (
-    <Routes>
-      <Route path='/'>
-        <Route index element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='*' element={<Error />} />
-      </Route>
-    </Routes>
-  )
-}
+    return (
+        <Routes>
+            <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+            <Route path="*" element={<Error />} />
+        </Routes>
+    );
+};
 
-export default Routing
+export default Routing;

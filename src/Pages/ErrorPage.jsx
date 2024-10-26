@@ -1,11 +1,8 @@
 import React from 'react';
-import Navbar from '../Components/Navbar';
-
 
 const ErrorPage = () => {
     return (
         <>
-            <Navbar/>
             <div style={styles.container}>
                 <h1 style={styles.errorCode}>404</h1>
                 <h2 style={styles.title}>Oops! Page Not Found</h2>
@@ -36,7 +33,7 @@ const styles = {
     errorCode: {
         fontSize: '8rem',
         fontWeight: 'bold',
-        color: '#ff6b6b',
+        color: '#0B5ED7',
         marginBottom: '20px'
     },
     title: {
@@ -54,7 +51,7 @@ const styles = {
         padding: '10px 20px',
         fontSize: '1rem',
         color: '#fff',
-        backgroundColor: '#ff6b6b',
+        backgroundColor: '#0B5ED7',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
