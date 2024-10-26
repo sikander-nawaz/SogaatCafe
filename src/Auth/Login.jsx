@@ -31,7 +31,7 @@ const Login = () => {
 
     const storedAdminPassword = localStorage.getItem("adminPassword");
 
-    if (email === "arham@gmail.com" && password === storedAdminPassword) {
+    if (email === "yasir@admin.com" && password === storedAdminPassword) {
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userPassword", password);
