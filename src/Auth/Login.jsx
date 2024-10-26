@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, query, where } from 'firebase/firestore';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { db } from "../Config/Firebase";
 import Image from "../Assets/Images/Sogaat_Photo-removebg-preview.png";
@@ -11,65 +11,64 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [adminId, setAdminId] = useState('');
     const [loading, setLoading] = useState(false);
     const [newPassword, setNewPassword] = useState('');
+    const [adminId, setAdminId] = useState(''); // New state for adminId
     const [passwordVisible, setPasswordVisible] = useState(false);
-
-    const defaultAdminPassword = "admin1235";
-    
-    useEffect(() => {
-        // Initialize admin password in local storage if not already set
-        if (!localStorage.getItem('adminPassword')) {
-            localStorage.setItem('adminPassword', defaultAdminPassword);
-        }
-    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const storedAdminPassword = localStorage.getItem('adminPassword');
+        const usersRef = collection(db, 'Users');
+        const qUser = query(usersRef, where('email', '==', email), where('password', '==', password));
+        const userSnapshot = await getDocs(qUser);
 
-        if (email === "arham@gmail.com" && password === storedAdminPassword) {
+        // Check if user is admin
+        const adminRef = collection(db, 'Admin');
+        const qAdmin = query(adminRef, where('email', '==', email), where('password', '==', password));
+        const adminSnapshot = await getDocs(qAdmin);
+
+        if (!userSnapshot.empty) {
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userPassword', password);
+            navigate('/home');
+        } else if (!adminSnapshot.empty) {
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userPassword', password);
             navigate('/dashboard');
         } else {
-            const usersRef = collection(db, 'Users');
-            const q = query(usersRef, where('email', '==', email), where('password', '==', password));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                localStorage.setItem('isAuthenticated', 'true');
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('userPassword', password);
-                navigate('/home');
-            } else {
-                alert("Invalid email or password. Please try again.");
-            }
+            alert("Invalid email or password. Please try again.");
         }
+
         setLoading(false);
         setEmail("");
         setPassword("");
     };
 
-    const handleForgotPassword = () => {
-        const adminIdToCheck = "admin123"; 
-        if (adminId === adminIdToCheck) {
-            if (newPassword) {
-                localStorage.setItem('adminPassword', newPassword); 
-                alert("Password updated successfully!");
+    const handleForgotPassword = async () => {
+        if (adminId && newPassword) {
+            // Check if the entered adminId matches the logged-in userId (email in this case)
+            if (adminId === "97k3Us1Su0Kg93g4Vm79") {
+                const adminDocRef = doc(db, 'Admin', '97k3Us1Su0Kg93g4Vm79'); // Change this if you have a dynamic way of getting the admin ID
+                try {
+                    await updateDoc(adminDocRef, { password: newPassword });
+                    alert("Password updated successfully!");
+                    setIsModalVisible(false);
+                } catch (error) {
+                    console.error("Error updating password:", error);
+                    alert("Failed to update password. Please try again.");
+                }
             } else {
-                alert("Please enter a new password.");
+                alert("Admin ID does not match the logged-in user's ID.");
             }
-            setIsModalVisible(false);
         } else {
-            alert("Incorrect Admin ID");
+            alert("Please enter a new password and admin ID.");
         }
-        setAdminId("");
         setNewPassword("");
+        setAdminId(""); // Clear adminId after processing
     };
 
     return (
@@ -116,24 +115,22 @@ const Login = () => {
                             </span>
                         </div>
                         <div className="mb-1 d-flex justify-content-end">
-                            <label className="form-label">
-                                <span
-                                    onClick={() => setIsModalVisible(true)}
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "#6366F1",
-                                        fontWeight: "bold",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Forgot Password?
-                                </span>
-                            </label>
+                            <span
+                                onClick={() => setIsModalVisible(true)}
+                                style={{
+                                    textDecoration: "none",
+                                    color: "#6366F1",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Forgot Password?
+                            </span>
                         </div>
                         <button
                             type="submit"
                             className="btn btn-primary mb-3 mx-auto d-block"
-                            disabled={loading} 
+                            disabled={loading}
                         >
                             {loading ? (
                                 <div className="spinner-border spinner-border-sm" role="status">
@@ -156,6 +153,7 @@ const Login = () => {
                     placeholder="Admin ID"
                     value={adminId}
                     onChange={(e) => setAdminId(e.target.value)}
+                    style={{ marginTop: '10px' }}
                 />
                 <Input.Password
                     placeholder="New Password"
