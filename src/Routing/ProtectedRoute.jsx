@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../Config/Firebase';
 
-const ProtectedRoute = ({ children, requiredEmail }) => {
+const ProtectedRoute = ({ children }) => {
     const [adminData, setAdminData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children, requiredEmail }) => {
             setLoading(false);
         };
 
-        if (location.pathname === '/dashboard') {
+        if (location.pathname === '/dashboard' || location.pathname === '/home') {
             fetchAdminData();
         } else {
             setLoading(false);
@@ -37,6 +37,12 @@ const ProtectedRoute = ({ children, requiredEmail }) => {
         return <Navigate to="/" />;
     }
 
+    // Redirect admin trying to access /home to /dashboard
+    if (location.pathname === '/home' && adminData) {
+        return <Navigate to="/dashboard" />;
+    }
+
+    // For accessing the dashboard, validate admin credentials
     if (location.pathname === '/dashboard' && (!adminData || userPassword !== adminData.password)) {
         return <Navigate to="/home" />;
     }
