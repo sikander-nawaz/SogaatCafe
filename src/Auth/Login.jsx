@@ -23,8 +23,7 @@ const Login = () => {
         const usersRef = collection(db, 'Users');
         const qUser = query(usersRef, where('email', '==', email), where('password', '==', password));
         const userSnapshot = await getDocs(qUser);
-
-        // Check if user is admin
+        
         const adminRef = collection(db, 'Admin');
         const qAdmin = query(adminRef, where('email', '==', email), where('password', '==', password));
         const adminSnapshot = await getDocs(qAdmin);
