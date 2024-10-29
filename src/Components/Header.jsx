@@ -1,19 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Menu, Modal, Input } from 'antd';
 import { db } from "../Config/Firebase";
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
-import Logo from "../Assets/Images/SOGAAT FLAVOUR FIRE-02.png"
-
+import { collection, addDoc, getDocs, query, where, doc, updateDoc } from 'firebase/firestore';
 
 const Header = () => {
+    const [admindata, setAdmindata] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+    const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
+    // State for Update Profile
+    const [adminEmail, setAdminEmail] = useState('');
+    const [adminPassword, setAdminPassword] = useState('');
+    const [currentAdminId, setCurrentAdminId] = useState(null);
+
+    // State for Create User
+    const [newUserEmail, setNewUserEmail] = useState('');
+    const [newUserPassword, setNewUserPassword] = useState('');
+
+    const collectionRef = collection(db, "Admin");
+
+    const getdata = async () => {
+        try {
+            setLoading(true);
+            const data = await getDocs(collectionRef);
+            const filterData = data.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+            }));
+            if (filterData.length > 0) {
+                setAdmindata(filterData);
+                setAdminEmail(filterData[0].email);  // Assume first admin data
+                setAdminPassword(filterData[0].password);
+                setCurrentAdminId(filterData[0].id);
+            }
+        } catch (error) {
+            console.error("Error Fetching Data...", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getdata();
+    }, []);
 
     const navigate = useNavigate();
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [userEmail, setUserEmail] = useState('');
-    const [userPassword, setUserPassword] = useState('');
 
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');
@@ -25,7 +59,7 @@ const Header = () => {
     const handleCreateUser = async () => {
         try {
             const usersRef = collection(db, 'Users');
-            const emailQuery = query(usersRef, where('email', '==', userEmail));
+            const emailQuery = query(usersRef, where('email', '==', newUserEmail));
             const querySnapshot = await getDocs(emailQuery);
 
             if (!querySnapshot.empty) {
@@ -34,13 +68,13 @@ const Header = () => {
             }
 
             await addDoc(usersRef, {
-                email: userEmail,
-                password: userPassword,
+                email: newUserEmail,
+                password: newUserPassword,
             });
 
-            setUserEmail('');
-            setUserPassword('');
-            setIsModalVisible(false);
+            setNewUserEmail('');
+            setNewUserPassword('');
+            setIsCreateModalVisible(false);
             alert('User created successfully!');
         } catch (error) {
             console.error('Error creating user: ', error);
@@ -48,57 +82,47 @@ const Header = () => {
         }
     };
 
-    const items = [
-        {
-            key: '1',
-            label: 'My Account',
-            disabled: true,
-        },
-        {
-            type: 'divider',
-        },
-        {
-            key: '4',
-            label: (
-                <span>
-                    <SettingOutlined /> My Profile
-                </span>
-            ),
-        },
-        {
-            type: 'divider',
-        },
-        {
-            key: '5',
-            label: (
-                <span onClick={() => setIsModalVisible(true)}>
-                    Create User
-                </span>
-            ),
-        },
-        {
-            type: 'divider',
-        },
-        {
-            key: '6',
-            label: 'Logout',
-            onClick: handleLogout,
-            style: { color: 'red' },
-        },
-    ];
+    const handleUpdateProfile = async () => {
+        if (!currentAdminId) return;
 
+        try {
+            const adminRef = doc(db, 'Admin', currentAdminId);
+            await updateDoc(adminRef, {
+                email: adminEmail,
+                password: adminPassword,
+            });
+
+            setIsUpdateModalVisible(false);
+            alert('Profile updated successfully!');
+        } catch (error) {
+            console.error('Error updating profile: ', error);
+            alert('Error updating profile');
+        }
+    };
+
+    const items = [
+        { key: '1', label: 'My Account', disabled: true },
+        { type: 'divider' },
+        { key: '4', label: (<span onClick={() => setIsUpdateModalVisible(true)}><SettingOutlined /> Update Profile</span>) },
+        { type: 'divider' },
+        { key: '5', label: (<span onClick={() => setIsCreateModalVisible(true)}>Create User</span>) },
+        { type: 'divider' },
+        { key: '6', label: 'Logout', onClick: handleLogout, style: { color: 'red' } },
+    ];
 
     return (
         <>
             <div className="container-fluid">
-                <div className="row">
+                <div className="row" style={{ padding: "5px" }}>
+                    <div className="col-4"></div>
                     <div className="col-4">
-                        <img src={Logo} alt="" width={100} height={100}/>
+                        <h1>
+                            <marquee behavior="scroll" direction="right" scrollamount="10">
+                                Welcome to Sogat
+                            </marquee>
+                        </h1>
                     </div>
-                    <div className="col-4">
-                        Welcome to Sogat
-                    </div>
-                    <div className="col-4 d-flex justify-content-end">
+                    <div className="col-4 d-flex justify-content-end pt-3">
                         <Dropdown
                             overlay={<Menu items={items} />}
                             trigger={['click']}
@@ -115,54 +139,47 @@ const Header = () => {
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            {/* Modal for Creating User */}
             <Modal
                 title="Create User"
-                visible={isModalVisible}
+                visible={isCreateModalVisible}
                 onOk={handleCreateUser}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={() => setIsCreateModalVisible(false)}
             >
                 <Input
                     placeholder="Email"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
+                    value={newUserEmail}
+                    onChange={(e) => setNewUserEmail(e.target.value)}
                 />
                 <Input.Password
                     placeholder="Password"
-                    value={userPassword}
-                    onChange={(e) => setUserPassword(e.target.value)}
+                    value={newUserPassword}
+                    onChange={(e) => setNewUserPassword(e.target.value)}
+                    style={{ marginTop: '10px' }}
+                />
+            </Modal>
+
+            {/* Modal for Updating Profile */}
+            <Modal
+                title="Update Profile"
+                visible={isUpdateModalVisible}
+                onOk={handleUpdateProfile}
+                onCancel={() => setIsUpdateModalVisible(false)}
+            >
+                <Input
+                    placeholder="Email"
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                />
+                <Input.Password
+                    placeholder="Password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
                     style={{ marginTop: '10px' }}
                 />
             </Modal>
         </>
-    )
+    );
 }
 
-export default Header
+export default Header;

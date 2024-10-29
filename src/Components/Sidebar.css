@@ -1,14 +1,13 @@
-/* Sidebar.css */
-
 .app {
   display: flex;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensures the app container covers the full viewport height */
 }
 
 .sidebar {
   background-color: #333;
   color: #fff;
   width: 250px;
+  height: 100vh; /* Makes the sidebar stretch to the full viewport height */
   transition: width 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -23,11 +22,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding-right: 45px;
 }
 
 .logo {
   font-size: 1.2em;
+  padding-left: 20px;
   font-weight: bold;
 }
 
@@ -43,6 +43,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  flex: 1; /* Ensures the menu section expands to fill remaining space */
 }
 
 .menu-item {
@@ -82,18 +83,69 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
   .sidebar {
-    position: fixed;
+    position: relative;
     z-index: 1000;
-    height: 100%;
-    left: -250px;
-    transition: left 0.3s ease;
+    height: 100vh; /* Ensures full viewport height */
+    width: 250px;
   }
 
   .collapsed .sidebar {
-    left: 0;
+    width: 80px;
   }
 
   .main-content {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .collapsed .sidebar {
+    width: 80px;
+  }
+
+  .sidebar-header {
+    padding-right: 15px;
+  }
+
+  .menu-item {
+    padding: 12px 15px;
+  }
+
+  .menu-item span {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 300px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .collapsed .sidebar {
+    width: 60px;
+  }
+
+  .menu-item {
+    padding: 10px 10px;
+  }
+
+  .toggle-btn {
+    font-size: 1em;
+  }
+
+  .menu-item span {
+    font-size: 0.8em;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  .header {
+    font-size: 1.3em;
   }
 }
