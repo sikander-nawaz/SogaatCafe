@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaHome, FaList, FaBox, FaChartLine, FaUsers, FaBars } from 'react-icons/fa';
 import './Sidebar.css';
 
+
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -44,8 +45,8 @@ const Sidebar = () => {
             {!collapsed && <span>Sales Report</span>}
           </div>
           <div className="menu-item">
-            <FaUsers />
-            {!collapsed && <span>Users</span>}
+              <FaUsers />
+              {!collapsed && <span>Users</span>}
           </div>
         </div>
       </div>

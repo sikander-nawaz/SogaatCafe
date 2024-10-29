@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../Config/Firebase';
+import { Spin } from 'antd';
 
 const ProtectedRoute = ({ children }) => {
     const [adminData, setAdminData] = useState(null);
@@ -31,7 +32,13 @@ const ProtectedRoute = ({ children }) => {
         }
     }, [userEmail, location.pathname]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     if (!isAuthenticated) {
         return <Navigate to="/" />;
