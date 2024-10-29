@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaHome, FaList, FaBox, FaChartLine, FaUsers, FaBars } from 'react-icons/fa';
 import './Sidebar.css';
+import Users from '../SubPages/Users';
 
 
 const Sidebar = () => {
@@ -54,7 +55,7 @@ const Sidebar = () => {
       {/* Main Content */}
       <main className="main-content">
         <div className="header">
-          <h1>Welcome back, Yasir!</h1>
+         <Users/>
         </div>
       </main>
     </div>

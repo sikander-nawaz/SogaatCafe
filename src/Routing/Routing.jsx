@@ -6,6 +6,7 @@ import Dashboard from '../Pages/DashBoard';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import Error from '../Pages/ErrorPage';
+import Users from '../SubPages/Users'
 
 const Routing = () => {
     return (
@@ -21,6 +22,7 @@ const Routing = () => {
                 } 
             />
             <Route path="*" element={<Error />} />
+            <Route path="/users" element={<Users />} />
         </Routes>
     );
 };

@@ -8,17 +8,12 @@ import { collection, addDoc, getDocs, query, where, doc, updateDoc } from 'fireb
 const Header = () => {
     const [admindata, setAdmindata] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
     const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
     // State for Update Profile
     const [adminEmail, setAdminEmail] = useState('');
     const [adminPassword, setAdminPassword] = useState('');
     const [currentAdminId, setCurrentAdminId] = useState(null);
-
-    // State for Create User
-    const [newUserEmail, setNewUserEmail] = useState('');
-    const [newUserPassword, setNewUserPassword] = useState('');
 
     const collectionRef = collection(db, "Admin");
 
@@ -56,32 +51,6 @@ const Header = () => {
         navigate('/');
     };
 
-    const handleCreateUser = async () => {
-        try {
-            const usersRef = collection(db, 'Users');
-            const emailQuery = query(usersRef, where('email', '==', newUserEmail));
-            const querySnapshot = await getDocs(emailQuery);
-
-            if (!querySnapshot.empty) {
-                alert('User already exists!');
-                return;
-            }
-
-            await addDoc(usersRef, {
-                email: newUserEmail,
-                password: newUserPassword,
-            });
-
-            setNewUserEmail('');
-            setNewUserPassword('');
-            setIsCreateModalVisible(false);
-            alert('User created successfully!');
-        } catch (error) {
-            console.error('Error creating user: ', error);
-            alert('Error creating user');
-        }
-    };
-
     const handleUpdateProfile = async () => {
         if (!currentAdminId) return;
 
@@ -105,7 +74,6 @@ const Header = () => {
         { type: 'divider' },
         { key: '4', label: (<span onClick={() => setIsUpdateModalVisible(true)}><SettingOutlined /> Update Profile</span>) },
         { type: 'divider' },
-        { key: '5', label: (<span onClick={() => setIsCreateModalVisible(true)}>Create User</span>) },
         { type: 'divider' },
         { key: '6', label: 'Logout', onClick: handleLogout, style: { color: 'red' } },
     ];
@@ -139,25 +107,6 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Modal for Creating User */}
-            <Modal
-                title="Create User"
-                visible={isCreateModalVisible}
-                onOk={handleCreateUser}
-                onCancel={() => setIsCreateModalVisible(false)}
-            >
-                <Input
-                    placeholder="Email"
-                    value={newUserEmail}
-                    onChange={(e) => setNewUserEmail(e.target.value)}
-                />
-                <Input.Password
-                    placeholder="Password"
-                    value={newUserPassword}
-                    onChange={(e) => setNewUserPassword(e.target.value)}
-                    style={{ marginTop: '10px' }}
-                />
-            </Modal>
 
             {/* Modal for Updating Profile */}
             <Modal
