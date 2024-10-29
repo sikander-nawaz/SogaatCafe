@@ -74,7 +74,6 @@ const Header = () => {
         { type: 'divider' },
         { key: '4', label: (<span onClick={() => setIsUpdateModalVisible(true)}><SettingOutlined /> Update Profile</span>) },
         { type: 'divider' },
-        { type: 'divider' },
         { key: '6', label: 'Logout', onClick: handleLogout, style: { color: 'red' } },
     ];
 

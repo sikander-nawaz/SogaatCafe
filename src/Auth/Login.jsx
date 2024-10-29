@@ -10,8 +10,8 @@ import {
 } from "firebase/firestore";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { db } from "../Config/Firebase";
-import Image from "../assets/images/Sogaat_Photo-removebg-preview.png";
-import { Modal, Input } from "antd";
+import Image from "../Assets/Images/Sogaat_Photo-removebg-preview.png";
+import { Modal, Input, message } from "antd";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -54,7 +54,8 @@ const Login = () => {
       localStorage.setItem("userPassword", password);
       navigate("/dashboard");
     } else {
-      alert("Invalid email or password. Please try again.");
+      // alert("Invalid email or password. Please try again.");
+      message.error("Invalid email or password. Please try again.");
     }
 
     setLoading(false);
@@ -69,14 +70,14 @@ const Login = () => {
         const adminDocRef = doc(db, "Admin", "97k3Us1Su0Kg93g4Vm79"); // Change this if you have a dynamic way of getting the admin ID
         try {
           await updateDoc(adminDocRef, { password: newPassword });
-          alert("Password updated successfully!");
+          message.success("Password updated successfully!");
           setIsModalVisible(false);
         } catch (error) {
           console.error("Error updating password:", error);
-          alert("Failed to update password. Please try again.");
+          message.error("Failed to update password. Please try again.");
         }
       } else {
-        alert("Admin ID does not match the logged-in user's ID.");
+        message.error("Admin ID does not match the logged-in user's ID.");
       }
     } else {
       alert("Please enter a new password and admin ID.");
