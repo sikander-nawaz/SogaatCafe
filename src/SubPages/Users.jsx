@@ -11,6 +11,9 @@ const Users = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const collectionRef = collection(db, 'Users');
 
     const fetchUsers = async () => {
@@ -20,13 +23,14 @@ const Users = () => {
 
     const addUser = async () => {
         if (newEmail && newPassword) {
+            setIsAdding(true);
             const existingUsers = await getDocs(collectionRef);
             const usersData = existingUsers.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
-            // Check if email already exists
             const userExists = usersData.some(user => user.email === newEmail);
             if (userExists) {
                 message.error('User already exists!');
+                setIsAdding(false);
                 return;
             }
 
@@ -34,6 +38,7 @@ const Users = () => {
             resetModal();
             message.success('User added successfully!');
             fetchUsers();
+            setIsAdding(false);
         } else {
             message.error('Please fill in both fields!');
         }
@@ -41,20 +46,24 @@ const Users = () => {
 
     const updateUser = async () => {
         if (newEmail && newPassword && currentUserId) {
+            setIsUpdating(true);
             const userDoc = doc(db, 'Users', currentUserId);
             await updateDoc(userDoc, { email: newEmail, password: newPassword });
             resetModal();
             message.success('User updated successfully!');
             fetchUsers();
+            setIsUpdating(false);
         } else {
             message.error('Please fill in both fields!');
         }
     };
 
     const deleteUser = async (id) => {
+        setIsDeleting(true);
         await deleteDoc(doc(db, 'Users', id));
         message.success('User deleted successfully!');
         fetchUsers();
+        setIsDeleting(false);
     };
 
     const handleEdit = (user) => {
@@ -106,6 +115,7 @@ const Users = () => {
                         type="primary"
                         icon={<DeleteOutlined />}
                         danger
+                        loading={isDeleting}
                         onClick={() => deleteUser(record.id)}
                     />
                 </>
@@ -130,6 +140,9 @@ const Users = () => {
                     visible={isModalVisible}
                     onOk={currentUserId ? updateUser : addUser}
                     onCancel={resetModal}
+                    okButtonProps={{
+                        loading: currentUserId ? isUpdating : isAdding
+                    }}
                     okText={currentUserId ? "Update" : "Add"}
                     cancelText="Cancel"
                 >
@@ -154,7 +167,11 @@ const Users = () => {
                         }
                     />
                 </Modal>
-                <Button type="primary" onClick={() => setIsModalVisible(true)} style={{ marginBottom: '20px' }}>
+                <Button
+                    type="primary"
+                    onClick={() => setIsModalVisible(true)}
+                    style={{ marginBottom: '20px' }}
+                >
                     Add User
                 </Button>
             </div>
