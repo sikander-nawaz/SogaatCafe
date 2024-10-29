@@ -42,7 +42,7 @@ const ProtectedRoute = ({ children }) => {
         return <Navigate to="/dashboard" />;
     }
 
-    // For accessing the dashboard, validate admin credentials
+    // For accessing the dashboard, validate admin credentials passwords
     if (location.pathname === '/dashboard' && (!adminData || userPassword !== adminData.password)) {
         return <Navigate to="/home" />;
     }

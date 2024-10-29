@@ -1,0 +1,99 @@
+/* Sidebar.css */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background-color: #333;
+  color: #fff;
+  width: 250px;
+  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.collapsed .sidebar {
+  width: 80px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.menu-item:hover {
+  background-color: #444;
+}
+
+.menu-item span {
+  margin-left: 15px;
+  font-size: 1em;
+}
+
+.collapsed .menu-item span {
+  display: none;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.header {
+  margin-top: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+    height: 100%;
+    left: -250px;
+    transition: left 0.3s ease;
+  }
+
+  .collapsed .sidebar {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
