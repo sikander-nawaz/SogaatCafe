@@ -65,7 +65,7 @@ const Login = () => {
 
   const handleForgotPassword = async () => {
     if (adminId && newPassword) {
-      // Check if the entered adminId matches the logged-in userId (email in this case)
+      // Check if the entered adminId matches the logged-in userId (email in this)
       if (adminId === "97k3Us1Su0Kg93g4Vm79") {
         const adminDocRef = doc(db, "Admin", "97k3Us1Su0Kg93g4Vm79"); // Change this if you have a dynamic way of getting the admin ID
         try {
