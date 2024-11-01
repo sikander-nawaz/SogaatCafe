@@ -76,7 +76,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Cont */}
       <main className="main-content">
         <div className="header">
           {renderComponent()}
