@@ -1,13 +1,13 @@
 .app {
   display: flex;
-  min-height: 100vh; /* Ensures the app container covers the full viewport height */
+  /* min-height: 100vh; Ensures the app container covers the full viewport height */
 }
 
 .sidebar {
   background-color: #333;
   color: #fff;
   width: 250px;
-  height: 100vh; /* Makes the sidebar stretch to the full viewport height */
+  /* height: 100vh; Makes the sidebar stretch to the full viewport height */
   transition: width 0.3s ease;
   display: flex;
   flex-direction: column;
