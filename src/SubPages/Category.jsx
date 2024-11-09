@@ -98,7 +98,7 @@ const Category = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchCategories();
   }, []);
 
   const columns = [
@@ -130,7 +130,7 @@ const Category = () => {
             icon={<DeleteOutlined />}
             danger
             loading={isDeleting}
-            onClick={() => deleteUser(record.id)}
+            onClick={() => deleteCategory(record.id)}
           />
         </>
       ),
@@ -152,26 +152,26 @@ const Category = () => {
         <Modal
           title={currentCategoryId ? "Update Category" : "Add New Category"}
           visible={isModalVisible}
-          onOk={currentUserId ? updateUser : addUser}
+          onOk={currentUserId ? updateCategory : addCategory}
           onCancel={resetModal}
           okButtonProps={{
-            loading: currentUserId ? isUpdating : isAdding,
+            loading: currentCategoryId ? isUpdating : isAdding,
           }}
-          okText={currentUserId ? "Update" : "Add"}
+          okText={currentCategoryId ? "Update" : "Add"}
           cancelText="Cancel"
         >
           <Input
             type="text"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="Enter email"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Enter category"
             style={{ marginBottom: "10px" }}
           />
           <Input
             type="text"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Enter password"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+            placeholder="Enter description"
           />
         </Modal>
         <Button
