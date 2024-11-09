@@ -12,41 +12,46 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Table, Button, Modal, Input, message } from "antd";
 
 const Category = () => {
-  const [users, setUsers] = useState([]);
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentCategoryId, setCurrentCategoryId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const collectionRef = collection(db, "Category");
 
-  const fetchUsers = async () => {
+  const fetchCategories = async () => {
     const data = await getDocs(collectionRef);
-    setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
-  const addUser = async () => {
-    if (newEmail && newPassword) {
+  const addCategory = async () => {
+    if (newCategory && newDescription) {
       setIsAdding(true);
-      const existingUsers = await getDocs(collectionRef);
-      const usersData = existingUsers.docs.map((doc) => ({
+      const existingCategories = await getDocs(collectionRef);
+      const categoriesData = existingCategories.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
 
-      const userExists = usersData.some((user) => user.email === newEmail);
-      if (userExists) {
-        message.error("User already exists!");
+      const categoryExists = categoriesData.some(
+        (user) => user.category === newCategory
+      );
+      if (categoryExists) {
+        message.error("Category already exists!");
         setIsAdding(false);
         return;
       }
 
-      await addDoc(collectionRef, { email: newEmail, password: newPassword });
+      await addDoc(collectionRef, {
+        category: newCategory,
+        description: newDescription,
+      });
       resetModal();
-      message.success("User added successfully!");
-      fetchUsers();
+      message.success("Category added successfully!");
+      fetchCategories();
       setIsAdding(false);
     } else {
       message.error("Please fill in both fields!");
@@ -95,15 +100,15 @@ const Category = () => {
 
   const columns = [
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      sorter: (a, b) => a.email.localeCompare(b.email),
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      sorter: (a, b) => a.category.localeCompare(b.category),
     },
     {
-      title: "Password",
-      dataIndex: "password",
-      key: "password",
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
       render: (text) => <span style={{ fontWeight: "bold" }}>{text}</span>,
     },
     {
@@ -133,7 +138,7 @@ const Category = () => {
     <>
       <div style={{ padding: "20px" }}>
         <Table
-          dataSource={users}
+          dataSource={categories}
           columns={columns}
           rowKey="id"
           bordered
@@ -142,7 +147,7 @@ const Category = () => {
         />
 
         <Modal
-          title={currentUserId ? "Update User" : "Add New User"}
+          title={currentCategoryId ? "Update Category" : "Add New Category"}
           visible={isModalVisible}
           onOk={currentUserId ? updateUser : addUser}
           onCancel={resetModal}
