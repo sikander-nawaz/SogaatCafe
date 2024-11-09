@@ -84,9 +84,9 @@ const Category = () => {
   };
 
   const handleEdit = (user) => {
-    setNewEmail(user.email);
-    setNewPassword(user.password);
-    setCurrentUserId(user.id);
+    setNewCategory(user.category);
+    setNewDescription(user.description);
+    setCurrentCategoryId(user.id);
     setIsModalVisible(true);
   };
 
