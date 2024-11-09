@@ -75,11 +75,11 @@ const Category = () => {
     }
   };
 
-  const deleteUser = async (id) => {
+  const deleteCategory = async (id) => {
     setIsDeleting(true);
-    await deleteDoc(doc(db, "Users", id));
-    message.success("User deleted successfully!");
-    fetchUsers();
+    await deleteDoc(doc(db, "Category", id));
+    message.success("Category deleted successfully!");
+    fetchCategories();
     setIsDeleting(false);
   };
 
