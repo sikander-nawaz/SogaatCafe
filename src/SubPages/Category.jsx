@@ -58,14 +58,17 @@ const Category = () => {
     }
   };
 
-  const updateUser = async () => {
-    if (newEmail && newPassword && currentUserId) {
+  const updateCategory = async () => {
+    if (newCategory && newDescription && currentCategoryId) {
       setIsUpdating(true);
-      const userDoc = doc(db, "Users", currentUserId);
-      await updateDoc(userDoc, { email: newEmail, password: newPassword });
+      const categoryDoc = doc(db, "Category", currentCategoryId);
+      await updateDoc(categoryDoc, {
+        category: newCategory,
+        description: newDescription,
+      });
       resetModal();
-      message.success("User updated successfully!");
-      fetchUsers();
+      message.success("Category updated successfully!");
+      fetchCategories();
       setIsUpdating(false);
     } else {
       message.error("Please fill in both fields!");
