@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { db } from "../Config/Firebase";
-import Image from "../Assets/Images/Sogaat_Photo-removebg-preview.png";
+import Image from "../assets/images/logo.png";
 import { Modal, Input, message } from "antd";
 
 const Login = () => {

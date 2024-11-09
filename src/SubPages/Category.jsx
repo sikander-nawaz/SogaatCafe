@@ -8,12 +8,7 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Table, Button, Modal, Input, message } from "antd";
 
 const Category = () => {
@@ -22,11 +17,10 @@ const Category = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const collectionRef = collection(db, "Users");
+  const collectionRef = collection(db, "Category");
 
   const fetchUsers = async () => {
     const data = await getDocs(collectionRef);
@@ -93,7 +87,6 @@ const Category = () => {
     setNewPassword("");
     setIsModalVisible(false);
     setCurrentUserId(null);
-    setShowPassword(false);
   };
 
   useEffect(() => {
@@ -160,30 +153,17 @@ const Category = () => {
           cancelText="Cancel"
         >
           <Input
-            type="email"
+            type="text"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             placeholder="Enter email"
             style={{ marginBottom: "10px" }}
           />
           <Input
-            type={showPassword ? "text" : "password"}
+            type="text"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="Enter password"
-            suffix={
-              showPassword ? (
-                <EyeOutlined
-                  onClick={() => setShowPassword(false)}
-                  style={{ cursor: "pointer" }}
-                />
-              ) : (
-                <EyeInvisibleOutlined
-                  onClick={() => setShowPassword(true)}
-                  style={{ cursor: "pointer" }}
-                />
-              )
-            }
           />
         </Modal>
         <Button
@@ -191,7 +171,7 @@ const Category = () => {
           onClick={() => setIsModalVisible(true)}
           style={{ marginBottom: "20px" }}
         >
-          Add User
+          Add Category
         </Button>
       </div>
     </>
