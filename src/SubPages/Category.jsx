@@ -152,7 +152,7 @@ const Category = () => {
         <Modal
           title={currentCategoryId ? "Update Category" : "Add New Category"}
           visible={isModalVisible}
-          onOk={currentUserId ? updateCategory : addCategory}
+          onOk={currentCategoryId ? updateCategory : addCategory}
           onCancel={resetModal}
           okButtonProps={{
             loading: currentCategoryId ? isUpdating : isAdding,
