@@ -91,10 +91,10 @@ const Category = () => {
   };
 
   const resetModal = () => {
-    setNewEmail("");
-    setNewPassword("");
+    setNewCategory("");
+    setNewDescription("");
     setIsModalVisible(false);
-    setCurrentUserId(null);
+    setCurrentCategoryId(null);
   };
 
   useEffect(() => {
