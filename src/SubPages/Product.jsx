@@ -30,7 +30,11 @@ const Product = () => {
   // Fetch categories from Firebase
   const fetchCategories = async () => {
     const data = await getDocs(categoryCollectionRef);
-    setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const categoryData = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setCategories([{ id: "all", category: "All Category" }, ...categoryData]);
   };
 
   // Fetch products from Firebase
@@ -47,12 +51,12 @@ const Product = () => {
   // Filter products based on selected category
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
-    if (value) {
+    if (value === "All Category" || !value) {
+      setFilteredProducts(products);
+    } else {
       setFilteredProducts(
         products.filter((product) => product.category === value)
       );
-    } else {
-      setFilteredProducts(products);
     }
   };
 
@@ -126,7 +130,7 @@ const Product = () => {
     {
       title: (
         <Select
-          placeholder="Select Category"
+          placeholder="All Category"
           value={selectedCategory}
           onChange={handleCategoryChange}
           style={{ width: "100%" }}

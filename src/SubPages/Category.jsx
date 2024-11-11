@@ -6,6 +6,8 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  query,
+  where,
   updateDoc,
 } from "firebase/firestore";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -37,7 +39,7 @@ const Category = () => {
       }));
 
       const categoryExists = categoriesData.some(
-        (user) => user.category === newCategory
+        (cat) => cat.category === newCategory
       );
       if (categoryExists) {
         message.error("Category already exists!");
@@ -77,16 +79,30 @@ const Category = () => {
 
   const deleteCategory = async (id) => {
     setIsDeleting(true);
+
+    // Delete category
     await deleteDoc(doc(db, "Category", id));
-    message.success("Category deleted successfully!");
+
+    // Delete associated products
+    const productCollectionRef = collection(db, "Product");
+    const productsQuery = query(
+      productCollectionRef,
+      where("category", "==", categories.find((cat) => cat.id === id)?.category)
+    );
+    const productDocs = await getDocs(productsQuery);
+    productDocs.forEach(async (productDoc) => {
+      await deleteDoc(productDoc.ref);
+    });
+
+    message.success("Category and its products deleted successfully!");
     fetchCategories();
     setIsDeleting(false);
   };
 
-  const handleEdit = (user) => {
-    setNewCategory(user.category);
-    setNewDescription(user.description);
-    setCurrentCategoryId(user.id);
+  const handleEdit = (category) => {
+    setNewCategory(category.category);
+    setNewDescription(category.description);
+    setCurrentCategoryId(category.id);
     setIsModalVisible(true);
   };
 
@@ -138,51 +154,49 @@ const Category = () => {
   ];
 
   return (
-    <>
-      <div style={{ padding: "20px" }}>
-        <Table
-          dataSource={categories}
-          columns={columns}
-          rowKey="id"
-          bordered
-          pagination={{ pageSize: 5 }}
-          style={{ backgroundColor: "#ffffff" }}
-        />
+    <div style={{ padding: "20px" }}>
+      <Table
+        dataSource={categories}
+        columns={columns}
+        rowKey="id"
+        bordered
+        pagination={{ pageSize: 5 }}
+        style={{ backgroundColor: "#ffffff" }}
+      />
 
-        <Modal
-          title={currentCategoryId ? "Update Category" : "Add New Category"}
-          visible={isModalVisible}
-          onOk={currentCategoryId ? updateCategory : addCategory}
-          onCancel={resetModal}
-          okButtonProps={{
-            loading: currentCategoryId ? isUpdating : isAdding,
-          }}
-          okText={currentCategoryId ? "Update" : "Add"}
-          cancelText="Cancel"
-        >
-          <Input
-            type="text"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            placeholder="Enter category"
-            style={{ marginBottom: "10px" }}
-          />
-          <Input
-            type="text"
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-            placeholder="Enter description"
-          />
-        </Modal>
-        <Button
-          type="primary"
-          onClick={() => setIsModalVisible(true)}
-          style={{ marginBottom: "20px" }}
-        >
-          Add Category
-        </Button>
-      </div>
-    </>
+      <Modal
+        title={currentCategoryId ? "Update Category" : "Add New Category"}
+        visible={isModalVisible}
+        onOk={currentCategoryId ? updateCategory : addCategory}
+        onCancel={resetModal}
+        okButtonProps={{
+          loading: currentCategoryId ? isUpdating : isAdding,
+        }}
+        okText={currentCategoryId ? "Update" : "Add"}
+        cancelText="Cancel"
+      >
+        <Input
+          type="text"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          placeholder="Enter category"
+          style={{ marginBottom: "10px" }}
+        />
+        <Input
+          type="text"
+          value={newDescription}
+          onChange={(e) => setNewDescription(e.target.value)}
+          placeholder="Enter description"
+        />
+      </Modal>
+      <Button
+        type="primary"
+        onClick={() => setIsModalVisible(true)}
+        style={{ marginBottom: "20px" }}
+      >
+        Add Category
+      </Button>
+    </div>
   );
 };
 
