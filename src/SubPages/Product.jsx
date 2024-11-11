@@ -130,7 +130,7 @@ const Product = () => {
     {
       title: (
         <Select
-          placeholder="All Category"
+          placeholder="Select Category"
           value={selectedCategory}
           onChange={handleCategoryChange}
           style={{ width: "100%" }}
