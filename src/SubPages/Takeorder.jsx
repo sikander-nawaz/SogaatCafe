@@ -17,7 +17,7 @@ const Takeorder = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Available Categories</h2>
+      <h2>Available Categories are:</h2>
       <ul>
         {categories.map((category) => (
           <li key={category.id}>
