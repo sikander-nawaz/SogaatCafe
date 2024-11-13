@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
 import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
-import { List, Button, Card, message } from "antd";
+import { List, Button, Card, message, Select } from "antd";
 
 const Takeorder = () => {
   const [categories, setCategories] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderType, setOrderType] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const generateOrderNumber = () => `ORD-${Math.floor(Math.random() * 1000000)}`;
 
@@ -110,10 +111,29 @@ const Takeorder = () => {
     }
   };
 
+  const filteredCategories = selectedCategory === "All"
+    ? categories
+    : categories.filter((category) => category.category === selectedCategory);
+
   return (
     <div style={{ padding: "20px", display: "flex" }}>
       <div style={{ flex: 1, marginRight: "20px" }}>
-        {categories.map((category) => (
+        <Select
+          placeholder="Select Category"
+          style={{ width: "100%", marginBottom: "20px" }}
+          value={selectedCategory}
+          onChange={setSelectedCategory}
+          allowClear
+        >
+          <Select.Option value="All">All Category</Select.Option>
+          {categories.map((category) => (
+            <Select.Option key={category.id} value={category.category}>
+              {category.category}
+            </Select.Option>
+          ))}
+        </Select>
+        
+        {filteredCategories.map((category) => (
           <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
             <List
               dataSource={category.products}
