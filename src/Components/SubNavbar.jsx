@@ -1,12 +1,11 @@
 // Navbar.js
 import React from "react";
-import { Typography, DatePicker, Row, Col } from "antd";
-import dayjs from "dayjs";
+import { Typography, DatePicker, Row, Col, Button } from "antd";
 
 const { Title } = Typography;
 const { MonthPicker } = DatePicker;
 
-const SubNavbar = ({ title, onMonthChange }) => {
+const SubNavbar = ({ title, onMonthChange, onExport }) => {
   // Trigger the onMonthChange event when the user selects a month
   const handleMonthSelect = (date) => {
     if (date) {
@@ -29,12 +28,21 @@ const SubNavbar = ({ title, onMonthChange }) => {
           </Title>
         </Col>
         <Col>
-          <MonthPicker
-            onChange={handleMonthSelect}
-            placeholder="Select Month"
-            format="MMMM YYYY"
-            style={{ width: 200 }}
-          />
+          <Row gutter={16}>
+            <Col>
+              <MonthPicker
+                onChange={handleMonthSelect}
+                placeholder="Select Month"
+                format="MMMM YYYY"
+                style={{ width: 200 }}
+              />
+            </Col>
+            <Col>
+              <Button type="primary" onClick={onExport}>
+                Export
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>
