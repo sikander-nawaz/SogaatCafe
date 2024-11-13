@@ -7,6 +7,8 @@ import Category from "../SubPages/Category";
 import Product from "../SubPages/Product";
 import SalesReport from "../SubPages/SalesReport";
 import Takeorder from "../SubPages/Takeorder";
+import Dash from '../SubPages/Dash';
+
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -31,7 +33,7 @@ const Sidebar = () => {
       case 'TakeOrder':
         return <Takeorder />;
       default:
-        return <div>Welcome to Sogaat Flavour Dashboard</div>;
+        return <Dash/>;
     }
   };
 
