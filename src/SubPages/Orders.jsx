@@ -50,7 +50,7 @@ const Orders = () => {
   }, []);
 
   const columns = [
-    { title: "Order No.", dataIndex: "orderNo", key: "orderNo" },
+    { title: "Order No.", dataIndex: "orderNumber", key: "orderNumber" },
     { title: "Date", dataIndex: "date", key: "date" },
     { title: "Order Type", dataIndex: "orderType", key: "orderType" },
     {
