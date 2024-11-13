@@ -69,7 +69,7 @@ const Users = () => {
       fetchUsers();
       setIsUpdating(false);
     } else {
-      message.error("Please fill in both fields!");
+      message.error("Please fill the both fields!");
     }
   };
 
