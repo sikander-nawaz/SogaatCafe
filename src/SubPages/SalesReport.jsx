@@ -62,7 +62,30 @@ const SalesReport = () => {
   };
 
   const handleExport = () => {
-    // Trigger print with filtered data for the selected month
+    const orderCount = filteredSales.length;
+
+    // Calculate the percentage of each order type
+    const orderTypeCounts = filteredSales.reduce(
+      (acc, sale) => {
+        acc[sale.orderType] = (acc[sale.orderType] || 0) + 1;
+        return acc;
+      },
+      { "Dine-In": 0, "Home Delivery": 0, "Take Away": 0 }
+    );
+
+    const dineInPercentage = (
+      (orderTypeCounts["Dine-In"] / orderCount) *
+      100
+    ).toFixed(2);
+    const homeDeliveryPercentage = (
+      (orderTypeCounts["Home Delivery"] / orderCount) *
+      100
+    ).toFixed(2);
+    const takeAwayPercentage = (
+      (orderTypeCounts["Take Away"] / orderCount) *
+      100
+    ).toFixed(2);
+
     const printContents = filteredSales
       .map(
         (sale) => `
@@ -81,24 +104,68 @@ const SalesReport = () => {
       <html>
       <head>
         <title>Sales Report Export</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+          }
+          .report-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+          }
+          h2 {
+            margin-top: 0;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+          .summary {
+            text-align: left;
+            margin-bottom: 20px;
+          }
+        </style>
       </head>
       <body>
-        <h2>Sales Report for ${
-          selectedMonth ? dayjs(selectedMonth).format("MMMM YYYY") : "All Time"
-        }</h2>
-        <table border="1" cellpadding="10" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Order No.</th>
-              <th>Date</th>
-              <th>Order Type</th>
-              <th>Total Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${printContents}
-          </tbody>
-        </table>
+        <div class="report-container">
+          <h2>Sales Report for ${
+            selectedMonth
+              ? dayjs(selectedMonth).format("MMMM YYYY")
+              : "All Time"
+          }</h2>
+          <div class="summary">
+            <p><strong>Total Orders:</strong> ${orderCount}</p>
+            <p><strong>Dine-In:</strong> ${dineInPercentage}%</p>
+            <p><strong>Home Delivery:</strong> ${homeDeliveryPercentage}%</p>
+            <p><strong>Take Away:</strong> ${takeAwayPercentage}%</p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Order No.</th>
+                <th>Date</th>
+                <th>Order Type</th>
+                <th>Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${printContents}
+            </tbody>
+          </table>
+        </div>
       </body>
       </html>
     `);

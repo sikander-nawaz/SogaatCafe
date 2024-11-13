@@ -30,7 +30,7 @@ const Routing = () => {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute requiredEmail="arham@gmail.com">
+          <ProtectedRoute requiredEmail="admin@gmail.com">
             <Dashboard />
           </ProtectedRoute>
         }
