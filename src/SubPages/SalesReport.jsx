@@ -8,8 +8,8 @@ import dayjs from "dayjs";
 const SalesReport = () => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
-  // Fetch sales orders from the database within the last 185 days and delete older ones
   const fetchSales = async () => {
     const ordersCollectionRef = collection(db, "Orders");
     const data = await getDocs(ordersCollectionRef);
@@ -18,16 +18,13 @@ const SalesReport = () => {
       id: doc.id,
     }));
 
-    // Calculate the date 185 days ago from today
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - 185);
 
-    // Filter orders to include only those within the last 185 days
     const recentSales = fetchedSales.filter(
       (order) => new Date(order.date) >= cutoffDate
     );
 
-    // Delete outdated records from Firebase
     const outdatedSales = fetchedSales.filter(
       (order) => new Date(order.date) < cutoffDate
     );
@@ -36,18 +33,17 @@ const SalesReport = () => {
       await deleteDoc(orderDoc);
     });
 
-    // Sort filtered orders by date in descending order (most recent first)
     const sortedSales = recentSales.sort(
       (a, b) => new Date(b.date) - new Date(a.date)
     );
 
     setSales(sortedSales);
-    setFilteredSales(sortedSales); // Initially display all recent sales
+    setFilteredSales(sortedSales);
   };
 
-  // Filter sales based on the selected month
   const handleMonthChange = (date) => {
     if (date) {
+      setSelectedMonth(date);
       const selectedMonth = dayjs(date).month();
       const selectedYear = dayjs(date).year();
 
@@ -61,9 +57,53 @@ const SalesReport = () => {
 
       setFilteredSales(monthFilteredSales);
     } else {
-      // Reset to show all sales if no month is selected
       setFilteredSales(sales);
     }
+  };
+
+  const handleExport = () => {
+    // Trigger print with filtered data for the selected month
+    const printContents = filteredSales
+      .map(
+        (sale) => `
+      <tr>
+        <td>${sale.orderNumber}</td>
+        <td>${new Date(sale.date).toLocaleString()}</td>
+        <td>${sale.orderType}</td>
+        <td>${sale.totalPrice} RS</td>
+      </tr>
+    `
+      )
+      .join("");
+
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+      <head>
+        <title>Sales Report Export</title>
+      </head>
+      <body>
+        <h2>Sales Report for ${
+          selectedMonth ? dayjs(selectedMonth).format("MMMM YYYY") : "All Time"
+        }</h2>
+        <table border="1" cellpadding="10" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Order No.</th>
+              <th>Date</th>
+              <th>Order Type</th>
+              <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${printContents}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
   };
 
   useEffect(() => {
@@ -89,7 +129,11 @@ const SalesReport = () => {
 
   return (
     <>
-      <Navbar title="Sales Report" onMonthChange={handleMonthChange} />
+      <Navbar
+        title="Sales Report"
+        onMonthChange={handleMonthChange}
+        onExport={handleExport}
+      />
       <div style={{ padding: "20px" }}>
         <Table
           dataSource={filteredSales}
