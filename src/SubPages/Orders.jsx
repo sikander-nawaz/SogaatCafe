@@ -18,13 +18,12 @@ const Orders = () => {
     const data = await getDocs(ordersCollectionRef);
     const fetchedOrders = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // Calculate the date 6 months ago from today
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    // Calculate the date 36 hours ago from now
+    const thirtySixHoursAgo = new Date(Date.now() - 36 * 60 * 60 * 1000);
 
-    // Filter orders that are within the last 6 months
+    // Filter orders that are within the last 36 hours
     const filteredOrders = fetchedOrders.filter(
-      (order) => new Date(order.date) >= sixMonthsAgo
+      (order) => new Date(order.date) >= thirtySixHoursAgo
     );
 
     // Sort filtered orders by date in descending order (most recent first)
@@ -68,7 +67,20 @@ const Orders = () => {
 
   const columns = [
     { title: "Order No.", dataIndex: "orderNumber", key: "orderNumber" },
-    { title: "Date", dataIndex: "date", key: "date" },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (date) => new Date(date).toLocaleString("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }),
+    }
+    ,
     { title: "Order Type", dataIndex: "orderType", key: "orderType" },
     {
       title: "Total Price",
