@@ -64,7 +64,7 @@ const SalesReport = () => {
   const handleExport = () => {
     const orderCount = filteredSales.length;
 
-    // Calculate the percentage of each order type
+    // Calculate the count and percentage of each order type
     const orderTypeCounts = filteredSales.reduce(
       (acc, sale) => {
         acc[sale.orderType] = (acc[sale.orderType] || 0) + 1;
@@ -73,18 +73,16 @@ const SalesReport = () => {
       { "Dine-In": 0, "Home Delivery": 0, "Take Away": 0 }
     );
 
-    const dineInPercentage = (
-      (orderTypeCounts["Dine-In"] / orderCount) *
-      100
-    ).toFixed(2);
+    const dineInCount = orderTypeCounts["Dine-In"];
+    const homeDeliveryCount = orderTypeCounts["Home Delivery"];
+    const takeAwayCount = orderTypeCounts["Take Away"];
+
+    const dineInPercentage = ((dineInCount / orderCount) * 100).toFixed(2);
     const homeDeliveryPercentage = (
-      (orderTypeCounts["Home Delivery"] / orderCount) *
+      (homeDeliveryCount / orderCount) *
       100
     ).toFixed(2);
-    const takeAwayPercentage = (
-      (orderTypeCounts["Take Away"] / orderCount) *
-      100
-    ).toFixed(2);
+    const takeAwayPercentage = ((takeAwayCount / orderCount) * 100).toFixed(2);
 
     const printContents = filteredSales
       .map(
@@ -115,7 +113,6 @@ const SalesReport = () => {
             width: 80%;
             margin: auto;
             padding: 20px;
-            border: 1px solid #ccc;
             border-radius: 8px;
           }
           h2 {
@@ -135,7 +132,10 @@ const SalesReport = () => {
           }
           .summary {
             text-align: left;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+          }
+          .summary p {
+            margin: 5px 0;
           }
         </style>
       </head>
@@ -147,10 +147,8 @@ const SalesReport = () => {
               : "All Time"
           }</h2>
           <div class="summary">
-            <p><strong>Total Orders:</strong> ${orderCount}</p>
-            <p><strong>Dine-In:</strong> ${dineInPercentage}%</p>
-            <p><strong>Home Delivery:</strong> ${homeDeliveryPercentage}%</p>
-            <p><strong>Take Away:</strong> ${takeAwayPercentage}%</p>
+            <p><strong>Total Orders:</strong> Dine-In: ${dineInCount} || Home Delivery: ${homeDeliveryCount} || Take Away: ${takeAwayCount} || Total: ${orderCount}</p>
+            <p><strong>Percentages:</strong> Dine-In: ${dineInPercentage}% || Home Delivery: ${homeDeliveryPercentage}% || Take Away: ${takeAwayPercentage}%</p>
           </div>
           <table>
             <thead>
