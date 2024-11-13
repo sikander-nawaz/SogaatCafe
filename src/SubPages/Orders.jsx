@@ -18,13 +18,23 @@ const Orders = () => {
     const data = await getDocs(ordersCollectionRef);
     const fetchedOrders = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // Sort orders by date in descending order (most recent first)
-    const sortedOrders = fetchedOrders.sort(
+    // Calculate the date 6 months ago from today
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    // Filter orders that are within the last 6 months
+    const filteredOrders = fetchedOrders.filter(
+      (order) => new Date(order.date) >= sixMonthsAgo
+    );
+
+    // Sort filtered orders by date in descending order (most recent first)
+    const sortedOrders = filteredOrders.sort(
       (a, b) => new Date(b.date) - new Date(a.date)
     );
 
     setOrders(sortedOrders);
   };
+
 
   // Delete an order
   const deleteOrder = async (id) => {
@@ -100,7 +110,7 @@ const Orders = () => {
           <div>
             <Title level={4} style={{ textAlign: "center" }}>Bill</Title>
             <Text><strong>Date:</strong> {currentOrder.date}</Text>
-            
+
             <Table
               dataSource={currentOrder.products}
               pagination={false}
@@ -112,11 +122,11 @@ const Orders = () => {
                 { title: "Amount", dataIndex: "amount", key: "amount", render: (amount) => `${amount} RS`, width: 100 },
               ]}
             />
-            
+
             <div style={{ textAlign: "right", marginTop: "10px" }}>
               <Text strong>Total Amount:</Text> <Text>{currentOrder.totalPrice} RS</Text>
             </div>
-            
+
             <div style={{ textAlign: "center", marginTop: "20px" }}>
               <Text strong>Order No.:</Text> <Text>{currentOrder.orderNo}</Text>
             </div>
