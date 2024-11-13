@@ -12,11 +12,18 @@ const Orders = () => {
 
   const { Text, Title } = Typography;
 
-  // Fetch orders from the database
+  // Fetch orders from the database, sorted by date
   const fetchOrders = async () => {
     const ordersCollectionRef = collection(db, "Orders");
     const data = await getDocs(ordersCollectionRef);
-    setOrders(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const fetchedOrders = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    // Sort orders by date in descending order (most recent first)
+    const sortedOrders = fetchedOrders.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+
+    setOrders(sortedOrders);
   };
 
   // Delete an order
