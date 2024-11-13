@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined, SettingOutlined } from '@ant-design/icons';
-import { Dropdown, Space, Menu, Modal, Input } from 'antd';
+import { Dropdown, Space, Menu, Modal, Input , message  } from 'antd';
 import { db } from "../Config/Firebase";
 import { collection, addDoc, getDocs, query, where, doc, updateDoc } from 'firebase/firestore';
+
 
 const Header = () => {
     const [admindata, setAdmindata] = useState([]);
@@ -62,10 +63,10 @@ const Header = () => {
             });
 
             setIsUpdateModalVisible(false);
-            alert('Profile updated successfully!');
+            message.success('Profile updated successfully!');
         } catch (error) {
             console.error('Error updating profile: ', error);
-            alert('Error updating profile');
+            message.error('Error updating profile');
         }
     };
 
@@ -81,9 +82,8 @@ const Header = () => {
         <>
             <div className="container-fluid">
                 <div className="row" style={{ padding: "5px" }}>
-                    <div className="col-4"></div>
-                    <div className="col-4">
-                        <h1>
+                    <div className="col-8">
+                        <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333" }}>
                             <marquee behavior="scroll" direction="right" scrollamount="10">
                                 Welcome to Sogat
                             </marquee>

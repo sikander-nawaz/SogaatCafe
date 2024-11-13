@@ -1,20 +1,12 @@
     import React from 'react';
-    import { useNavigate } from 'react-router-dom';
+    import UserHeader from "../UsersData/UserHeader"
 
     const HomePage = () => {
-        const navigate = useNavigate();
 
-        const handleLogout = () => {
-            localStorage.removeItem('isAuthenticated');
-            navigate('/');
-        };
 
         return (
             <>
-                <div>
-                    Home
-                    <button onClick={handleLogout} className="btn btn-secondary mt-3">Logout</button>
-                </div>
+               <UserHeader/>
             </>
         );
     };
