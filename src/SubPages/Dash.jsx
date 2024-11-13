@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { db } from "../Config/Firebase"; // Adjust the path to your Firebase config
 import { collection, getDocs } from "firebase/firestore";
-import { PulseLoader } from "react-spinners";
+import { Spin } from 'antd';
 
 // Register chart components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -122,9 +122,11 @@ export default function Dashboard() {
 
       {/* Loader */}
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
-          <PulseLoader size={15} color={"#0077B6"} loading={loading} />
-        </div>
+                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  paddingTop : "100px"
+                  }}>
+                 <Spin size="large" />
+             </div>
       ) : (
         <div style={{ margin: "20px auto", backgroundColor: "#f9f9f9", borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "20px", maxWidth: "800px" }}>
           <Bar data={data} options={options} />
