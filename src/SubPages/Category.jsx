@@ -154,49 +154,54 @@ const Category = () => {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Table
-        dataSource={categories}
-        columns={columns}
-        rowKey="id"
-        bordered
-        pagination={{ pageSize: 5 }}
-        style={{ backgroundColor: "#ffffff" }}
-      />
+    <>
+      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
+        Category
+      </h1>
+      <div style={{ padding: "20px" }}>
+        <Table
+          dataSource={categories}
+          columns={columns}
+          rowKey="id"
+          bordered
+          pagination={{ pageSize: 5 }}
+          style={{ backgroundColor: "#ffffff" }}
+        />
 
-      <Modal
-        title={currentCategoryId ? "Update Category" : "Add New Category"}
-        visible={isModalVisible}
-        onOk={currentCategoryId ? updateCategory : addCategory}
-        onCancel={resetModal}
-        okButtonProps={{
-          loading: currentCategoryId ? isUpdating : isAdding,
-        }}
-        okText={currentCategoryId ? "Update" : "Add"}
-        cancelText="Cancel"
-      >
-        <Input
-          type="text"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          placeholder="Enter category"
-          style={{ marginBottom: "10px" }}
-        />
-        <Input
-          type="text"
-          value={newDescription}
-          onChange={(e) => setNewDescription(e.target.value)}
-          placeholder="Enter description"
-        />
-      </Modal>
-      <Button
-        type="primary"
-        onClick={() => setIsModalVisible(true)}
-        style={{ marginBottom: "20px" }}
-      >
-        Add Category
-      </Button>
-    </div>
+        <Modal
+          title={currentCategoryId ? "Update Category" : "Add New Category"}
+          visible={isModalVisible}
+          onOk={currentCategoryId ? updateCategory : addCategory}
+          onCancel={resetModal}
+          okButtonProps={{
+            loading: currentCategoryId ? isUpdating : isAdding,
+          }}
+          okText={currentCategoryId ? "Update" : "Add"}
+          cancelText="Cancel"
+        >
+          <Input
+            type="text"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Enter category"
+            style={{ marginBottom: "10px" }}
+          />
+          <Input
+            type="text"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+            placeholder="Enter description"
+          />
+        </Modal>
+        <Button
+          type="primary"
+          onClick={() => setIsModalVisible(true)}
+          style={{ marginBottom: "20px" }}
+        >
+          Add Category
+        </Button>
+      </div>
+    </>
   );
 };
 

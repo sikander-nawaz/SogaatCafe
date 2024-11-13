@@ -102,50 +102,57 @@ const Orders = () => {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Table dataSource={orders} columns={columns} rowKey="id" bordered pagination={{ pageSize: 5 }} style={{ backgroundColor: "#ffffff" }} />
+    <>
+      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
+        Orders
+      </h1>
+      <div style={{ padding: "20px" }}>
 
-      <Modal
-        title="Order Details"
-        visible={isModalVisible}
-        onCancel={handleModalClose}
-        footer={[
-          <Button key="print" type="primary" onClick={handlePrint}>
-            Print
-          </Button>,
-          <Button key="close" onClick={handleModalClose}>
-            Close
-          </Button>,
-        ]}
-      >
-        {currentOrder && (
-          <div>
-            <Title level={4} style={{ textAlign: "center" }}>Bill</Title>
-            <Text><strong>Date:</strong> {currentOrder.date}</Text>
+        <Table dataSource={orders} columns={columns} rowKey="id" bordered pagination={{ pageSize: 5 }} style={{ backgroundColor: "#ffffff" }} />
 
-            <Table
-              dataSource={currentOrder.products}
-              pagination={false}
-              rowKey={(record) => record.name}
-              style={{ marginTop: "10px", marginBottom: "10px" }}
-              columns={[
-                { title: "QTY", dataIndex: "quantity", key: "quantity", width: 80 },
-                { title: "Order", dataIndex: "name", key: "name", render: (name) => <Text>{name}</Text> },
-                { title: "Amount", dataIndex: "amount", key: "amount", render: (amount) => `${amount} RS`, width: 100 },
-              ]}
-            />
+        <Modal
+          title="Order Details"
+          visible={isModalVisible}
+          onCancel={handleModalClose}
+          footer={[
+            <Button key="print" type="primary" onClick={handlePrint}>
+              Print
+            </Button>,
+            <Button key="close" onClick={handleModalClose}>
+              Close
+            </Button>,
+          ]}
+        >
+          {currentOrder && (
+            <div>
+              <Title level={4} style={{ textAlign: "center" }}>Bill</Title>
+              <Text><strong>Date:</strong> {currentOrder.date}</Text>
 
-            <div style={{ textAlign: "right", marginTop: "10px" }}>
-              <Text strong>Total Amount:</Text> <Text>{currentOrder.totalPrice} RS</Text>
+              <Table
+                dataSource={currentOrder.products}
+                pagination={false}
+                rowKey={(record) => record.name}
+                style={{ marginTop: "10px", marginBottom: "10px" }}
+                columns={[
+                  { title: "QTY", dataIndex: "quantity", key: "quantity", width: 80 },
+                  { title: "Order", dataIndex: "name", key: "name", render: (name) => <Text>{name}</Text> },
+                  { title: "Amount", dataIndex: "amount", key: "amount", render: (amount) => `${amount} RS`, width: 100 },
+                ]}
+              />
+
+              <div style={{ textAlign: "right", marginTop: "10px" }}>
+                <Text strong>Total Amount:</Text> <Text>{currentOrder.totalPrice} RS</Text>
+              </div>
+
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+                <Text strong>Order No.:</Text> <Text>{currentOrder.orderNo}</Text>
+              </div>
             </div>
+          )}
+        </Modal>
+      </div>
+    </>
 
-            <div style={{ textAlign: "center", marginTop: "20px" }}>
-              <Text strong>Order No.:</Text> <Text>{currentOrder.orderNo}</Text>
-            </div>
-          </div>
-        )}
-      </Modal>
-    </div>
   );
 };
 

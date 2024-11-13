@@ -178,6 +178,9 @@ const Product = () => {
 
   return (
     <>
+    <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
+          Products
+        </h1>
       <div style={{ padding: "20px" }}>
         <Table
           dataSource={filteredProducts}

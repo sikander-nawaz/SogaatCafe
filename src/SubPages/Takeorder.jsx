@@ -116,94 +116,99 @@ const Takeorder = () => {
     : categories.filter((category) => category.category === selectedCategory);
 
   return (
-    <div style={{ padding: "20px", display: "flex" }}>
-      <div style={{ flex: 1, marginRight: "20px" }}>
-        <Select
-          placeholder="Select Category"
-          style={{ width: "100%", marginBottom: "20px" }}
-          value={selectedCategory}
-          onChange={setSelectedCategory}
-          allowClear
-        >
-          <Select.Option value="All">All Category</Select.Option>
-          {categories.map((category) => (
-            <Select.Option key={category.id} value={category.category}>
-              {category.category}
-            </Select.Option>
+    <>
+      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
+        Take Order
+      </h1>
+      <div style={{ padding: "20px", display: "flex" }}>
+        <div style={{ flex: 1, marginRight: "20px" }}>
+          <Select
+            placeholder="Select Category"
+            style={{ width: "100%", marginBottom: "20px" }}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+            allowClear
+          >
+            <Select.Option value="All">All Category</Select.Option>
+            {categories.map((category) => (
+              <Select.Option key={category.id} value={category.category}>
+                {category.category}
+              </Select.Option>
+            ))}
+          </Select>
+
+          {filteredCategories.map((category) => (
+            <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
+              <List
+                dataSource={category.products}
+                renderItem={(product) => (
+                  <List.Item>
+                    <Button
+                      type="link"
+                      onClick={() => handleProductClick(product)}
+                    >
+                      {product.product} - {product.price} RS
+                    </Button>
+                  </List.Item>
+                )}
+              />
+            </Card>
           ))}
-        </Select>
-        
-        {filteredCategories.map((category) => (
-          <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
-            <List
-              dataSource={category.products}
-              renderItem={(product) => (
-                <List.Item>
-                  <Button
-                    type="link"
-                    onClick={() => handleProductClick(product)}
-                  >
-                    {product.product} - {product.price} RS
-                  </Button>
-                </List.Item>
-              )}
-            />
-          </Card>
-        ))}
-      </div>
-
-      <div style={{ width: "300px", padding: "20px", background: "#f7f7f7" }}>
-        <h3>Selected Products</h3>
-        <List
-          dataSource={selectedProducts}
-          renderItem={(item, index) => (
-            <List.Item
-              actions={[
-                <Button onClick={() => updateQuantity(index, -1)}>-</Button>,
-                <span>{item.quantity}</span>,
-                <Button onClick={() => updateQuantity(index, 1)}>+</Button>,
-                <Button danger onClick={() => removeProduct(index)}>Remove</Button>
-              ]}
-            >
-              {item.product} - {item.price} RS each
-            </List.Item>
-          )}
-        />
-        <h3>Total: {totalPrice} RS</h3>
-
-        <h4>Select Order Type</h4>
-        <div style={{ marginBottom: "10px" }}>
-          <Button
-            type={orderType === "Dine-In" ? "primary" : "default"}
-            onClick={() => setOrderType("Dine-In")}
-            style={{ marginRight: "5px" }}
-          >
-            Dine-In
-          </Button>
-          <Button
-            type={orderType === "Home Delivery" ? "primary" : "default"}
-            onClick={() => setOrderType("Home Delivery")}
-            style={{ marginRight: "5px" }}
-          >
-            Home Delivery
-          </Button>
-          <Button
-            type={orderType === "Take Away" ? "primary" : "default"}
-            onClick={() => setOrderType("Take Away")}
-          >
-            Take Away
-          </Button>
         </div>
 
-        <Button
-          type="primary"
-          onClick={placeOrder}
-          style={{ width: "100%", marginTop: "10px" }}
-        >
-          Place Order
-        </Button>
+        <div style={{ width: "300px", padding: "20px", background: "#f7f7f7" }}>
+          <h3>Selected Products</h3>
+          <List
+            dataSource={selectedProducts}
+            renderItem={(item, index) => (
+              <List.Item
+                actions={[
+                  <Button onClick={() => updateQuantity(index, -1)}>-</Button>,
+                  <span>{item.quantity}</span>,
+                  <Button onClick={() => updateQuantity(index, 1)}>+</Button>,
+                  <Button danger onClick={() => removeProduct(index)}>Remove</Button>
+                ]}
+              >
+                {item.product} - {item.price} RS each
+              </List.Item>
+            )}
+          />
+          <h3>Total: {totalPrice} RS</h3>
+
+          <h4>Select Order Type</h4>
+          <div style={{ marginBottom: "10px" }}>
+            <Button
+              type={orderType === "Dine-In" ? "primary" : "default"}
+              onClick={() => setOrderType("Dine-In")}
+              style={{ marginRight: "5px" }}
+            >
+              Dine-In
+            </Button>
+            <Button
+              type={orderType === "Home Delivery" ? "primary" : "default"}
+              onClick={() => setOrderType("Home Delivery")}
+              style={{ marginRight: "5px" }}
+            >
+              Home Delivery
+            </Button>
+            <Button
+              type={orderType === "Take Away" ? "primary" : "default"}
+              onClick={() => setOrderType("Take Away")}
+            >
+              Take Away
+            </Button>
+          </div>
+
+          <Button
+            type="primary"
+            onClick={placeOrder}
+            style={{ width: "100%", marginTop: "10px" }}
+          >
+            Place Order
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

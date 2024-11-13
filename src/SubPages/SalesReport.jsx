@@ -47,10 +47,15 @@ const SalesReport = () => {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Title level={3}>Sales Report (Last 6 Months)</Title>
-      <Table dataSource={sales} columns={columns} rowKey="id" bordered pagination={{ pageSize: 7 }} />
-    </div>
+    <>
+      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
+      Sales Report (Last 6 Months)
+      </h1>
+      <div style={{ padding: "20px" }}>
+        <Table dataSource={sales} columns={columns} rowKey="id" bordered pagination={{ pageSize: 7 }} />
+      </div>
+    </>
+
   );
 };
 
