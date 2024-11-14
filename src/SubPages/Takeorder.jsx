@@ -124,7 +124,8 @@ const Takeorder = () => {
   return (
     <>
 
-<div      >
+  
+      <div      >
         <Row justify="space-between" align="middle">
           <Col>
             <h1
@@ -133,22 +134,29 @@ const Takeorder = () => {
                 fontWeight: "bold",
                 color: "#333",
                 marginBottom: 0,
-                paddingLeft : "20px"
+                paddingLeft: "20px"
               }}
             >
               Take Order
             </h1>
           </Col>
           <Col>
-             <Input
-            placeholder="Search Product"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: "110%" }}
-          />
+            <Input
+              placeholder="Search Product"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ marginBottom: "20px", width: "300px" }}
+            />
           </Col>
         </Row>
       </div>
+
+
+
+
+
+
+
       <div style={{ padding: "20px", display: "flex" }}>
         <div style={{ flex: 1, marginRight: "20px" }}>
           <Select
@@ -166,7 +174,7 @@ const Takeorder = () => {
             ))}
           </Select>
 
-         
+
 
           {filteredCategories.map((category) => (
             <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
