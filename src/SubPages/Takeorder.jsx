@@ -123,9 +123,7 @@ const Takeorder = () => {
 
   return (
     <>
-
-  
-      <div      >
+      <div>
         <Row justify="space-between" align="middle">
           <Col>
             <h1
@@ -151,12 +149,6 @@ const Takeorder = () => {
         </Row>
       </div>
 
-
-
-
-
-
-
       <div style={{ padding: "20px", display: "flex" }}>
         <div style={{ flex: 1, marginRight: "20px" }}>
           <Select
@@ -174,25 +166,26 @@ const Takeorder = () => {
             ))}
           </Select>
 
-
-
-          {filteredCategories.map((category) => (
-            <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
-              <List
-                dataSource={filteredProducts(category.products)}
-                renderItem={(product) => (
-                  <List.Item>
-                    <Button
-                      type="link"
-                      onClick={() => handleProductClick(product)}
-                    >
-                      {product.product} - {product.price} RS
-                    </Button>
-                  </List.Item>
-                )}
-              />
-            </Card>
-          ))}
+          {filteredCategories.map((category) => {
+            const products = filteredProducts(category.products);
+            return products.length > 0 ? (
+              <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
+                <List
+                  dataSource={products}
+                  renderItem={(product) => (
+                    <List.Item>
+                      <Button
+                        type="link"
+                        onClick={() => handleProductClick(product)}
+                      >
+                        {product.product} - {product.price} RS
+                      </Button>
+                    </List.Item>
+                  )}
+                />
+              </Card>
+            ) : null;
+          })}
         </div>
 
         <div style={{ width: "300px", padding: "20px", background: "#f7f7f7" }}>
