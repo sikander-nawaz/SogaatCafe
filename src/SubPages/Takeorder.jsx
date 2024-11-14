@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
 import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
-import { List, Button, Card, message, Select } from "antd";
+import { List, Button, Card, message, Select, Input, Row, Col } from "antd";
 
 const Takeorder = () => {
   const [categories, setCategories] = useState([]);
@@ -9,6 +9,7 @@ const Takeorder = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderType, setOrderType] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const generateOrderNumber = () => `ORD-${Math.floor(Math.random() * 1000000)}`;
 
@@ -115,11 +116,39 @@ const Takeorder = () => {
     ? categories
     : categories.filter((category) => category.category === selectedCategory);
 
+  const filteredProducts = (products) =>
+    products.filter((product) =>
+      product.product.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
   return (
     <>
-      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
-        Take Order
-      </h1>
+
+<div      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <h1
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+                paddingLeft : "20px"
+              }}
+            >
+              Take Order
+            </h1>
+          </Col>
+          <Col>
+             <Input
+            placeholder="Search Product"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: "110%" }}
+          />
+          </Col>
+        </Row>
+      </div>
       <div style={{ padding: "20px", display: "flex" }}>
         <div style={{ flex: 1, marginRight: "20px" }}>
           <Select
@@ -137,10 +166,12 @@ const Takeorder = () => {
             ))}
           </Select>
 
+         
+
           {filteredCategories.map((category) => (
             <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
               <List
-                dataSource={category.products}
+                dataSource={filteredProducts(category.products)}
                 renderItem={(product) => (
                   <List.Item>
                     <Button

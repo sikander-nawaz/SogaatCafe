@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table, Button, Modal, Input, Select, message } from "antd";
+import { Table, Button, Modal, Input, Select, message, Row, Col } from "antd";
 
 const Product = () => {
   const [categories, setCategories] = useState([]);
@@ -23,6 +23,7 @@ const Product = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const categoryCollectionRef = collection(db, "Category");
   const productCollectionRef = collection(db, "Product");
@@ -51,13 +52,31 @@ const Product = () => {
   // Filter products based on selected category
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
-    if (value === "All Category" || !value) {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter((product) => product.category === value)
+    filterProducts(value, searchQuery);
+  };
+
+  // Filter products based on search query
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    filterProducts(selectedCategory, query);
+  };
+
+  // Combined filtering function
+  const filterProducts = (category, query) => {
+    let filtered = products;
+
+    if (category && category !== "All Category") {
+      filtered = filtered.filter((product) => product.category === category);
+    }
+
+    if (query) {
+      filtered = filtered.filter((product) =>
+        product.product.toLowerCase().includes(query)
       );
     }
+
+    setFilteredProducts(filtered);
   };
 
   // Add a new product to the selected category
@@ -178,17 +197,37 @@ const Product = () => {
 
   return (
     <>
-      <h1
-        style={{
-          fontFamily: "Times New Roman",
-          fontWeight: "bold",
-          color: "#333",
-          textAlign: "center",
-        }}
-      >
-        Products
-      </h1>
+
+
+
+      <div      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <h1
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+                paddingLeft: "20px"
+              }}
+            >
+              Products
+            </h1>
+          </Col>
+          <Col>
+            <Input
+              placeholder="Search by product name"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              style={{ marginBottom: "20px", width: "100%" }}
+            />
+          </Col>
+        </Row>
+      </div>
+
       <div style={{ padding: "20px" }}>
+
         <Table
           dataSource={filteredProducts}
           columns={columns}

@@ -6,12 +6,10 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  query,
-  where,
   updateDoc,
 } from "firebase/firestore";
+import { Table, Button, Modal, Input, message, Row, Col } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table, Button, Modal, Input, message } from "antd";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -21,7 +19,7 @@ const Category = () => {
   const [currentCategoryId, setCurrentCategoryId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const collectionRef = collection(db, "Category");
 
   const fetchCategories = async () => {
@@ -30,79 +28,68 @@ const Category = () => {
   };
 
   const addCategory = async () => {
-    if (newCategory && newDescription) {
-      setIsAdding(true);
-      const existingCategories = await getDocs(collectionRef);
-      const categoriesData = existingCategories.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+    if (!newCategory || !newDescription) {
+      message.error("Please fill out all fields.");
+      return;
+    }
 
-      const categoryExists = categoriesData.some(
-        (cat) => cat.category === newCategory
-      );
-      if (categoryExists) {
-        message.error("Category already exists!");
-        setIsAdding(false);
-        return;
-      }
-
+    setIsAdding(true);
+    try {
       await addDoc(collectionRef, {
         category: newCategory,
         description: newDescription,
       });
-      resetModal();
       message.success("Category added successfully!");
       fetchCategories();
+      resetModal();
+    } catch (error) {
+      message.error("Failed to add category.");
+    } finally {
       setIsAdding(false);
-    } else {
-      message.error("Please fill in both fields!");
     }
   };
 
   const updateCategory = async () => {
-    if (newCategory && newDescription && currentCategoryId) {
-      setIsUpdating(true);
+    if (!newCategory || !newDescription || !currentCategoryId) {
+      message.error("Please fill out all fields.");
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
       const categoryDoc = doc(db, "Category", currentCategoryId);
       await updateDoc(categoryDoc, {
         category: newCategory,
         description: newDescription,
       });
-      resetModal();
       message.success("Category updated successfully!");
       fetchCategories();
+      resetModal();
+    } catch (error) {
+      message.error("Failed to update category.");
+    } finally {
       setIsUpdating(false);
-    } else {
-      message.error("Please fill in both fields!");
     }
   };
 
   const deleteCategory = async (id) => {
-    setIsDeleting(true);
-
-    // Delete category
-    await deleteDoc(doc(db, "Category", id));
-
-    // Delete associated products
-    const productCollectionRef = collection(db, "Product");
-    const productsQuery = query(
-      productCollectionRef,
-      where("category", "==", categories.find((cat) => cat.id === id)?.category)
-    );
-    const productDocs = await getDocs(productsQuery);
-    productDocs.forEach(async (productDoc) => {
-      await deleteDoc(productDoc.ref);
-    });
-
-    message.success("Category and its products deleted successfully!");
-    fetchCategories();
-    setIsDeleting(false);
+    setIsUpdating(true);
+    try {
+      const categoryDoc = doc(db, "Category", id);
+      await deleteDoc(categoryDoc);
+      message.success("Category deleted successfully!");
+      fetchCategories();
+    } catch (error) {
+      message.error("Failed to delete category.");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleEdit = (category) => {
+    setCurrentCategoryId(category.id);
     setNewCategory(category.category);
     setNewDescription(category.description);
-    setCurrentCategoryId(category.id);
     setIsModalVisible(true);
   };
 
@@ -117,18 +104,20 @@ const Category = () => {
     fetchCategories();
   }, []);
 
+  const filteredCategories = categories.filter((category) =>
+    category.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const columns = [
     {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      sorter: (a, b) => a.category.localeCompare(b.category),
     },
     {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      render: (text) => <span style={{ fontWeight: "bold" }}>{text}</span>,
     },
     {
       title: "Actions",
@@ -136,16 +125,14 @@ const Category = () => {
       render: (_, record) => (
         <>
           <Button
-            type="primary"
+            type="link"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
-            style={{ marginRight: "8px" }}
           />
           <Button
-            type="primary"
-            icon={<DeleteOutlined />}
+            type="link"
             danger
-            loading={isDeleting}
+            icon={<DeleteOutlined />}
             onClick={() => deleteCategory(record.id)}
           />
         </>
@@ -155,12 +142,35 @@ const Category = () => {
 
   return (
     <>
-      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
-        Category
-      </h1>
+      <div      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <h1
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+                paddingLeft : "20px"
+              }}
+            >
+              Category
+            </h1>
+          </Col>
+          <Col>
+            <Input
+              placeholder="Search Category"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: "200px" }}
+            />
+          </Col>
+        </Row>
+      </div>
+
       <div style={{ padding: "20px" }}>
         <Table
-          dataSource={categories}
+          dataSource={filteredCategories}
           columns={columns}
           rowKey="id"
           bordered
@@ -193,10 +203,11 @@ const Category = () => {
             placeholder="Enter description"
           />
         </Modal>
+
         <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
-          style={{ marginBottom: "20px" }}
+          style={{ marginTop: "20px" }}
         >
           Add Category
         </Button>

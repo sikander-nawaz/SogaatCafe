@@ -14,10 +14,12 @@ import {
   EyeInvisibleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-import { Table, Button, Modal, Input, message } from "antd";
+import { Table, Button, Modal, Input, message, Row, Col } from "antd";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -30,7 +32,9 @@ const Users = () => {
 
   const fetchUsers = async () => {
     const data = await getDocs(collectionRef);
-    setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const usersData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    setUsers(usersData);
+    setFilteredUsers(usersData);
   };
 
   const addUser = async () => {
@@ -69,7 +73,7 @@ const Users = () => {
       fetchUsers();
       setIsUpdating(false);
     } else {
-      message.error("Please fill the both fields!");
+      message.error("Please fill in both fields!");
     }
   };
 
@@ -94,6 +98,18 @@ const Users = () => {
     setIsModalVisible(false);
     setCurrentUserId(null);
     setShowPassword(false);
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = users.filter(
+      (user) =>
+        user.email.toLowerCase().includes(query) ||
+        user.password.toLowerCase().includes(query)
+    );
+    setFilteredUsers(filtered);
   };
 
   useEffect(() => {
@@ -138,12 +154,40 @@ const Users = () => {
 
   return (
     <>
-    <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
-          Users
-        </h1>
+
+
+<div      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <h1
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+                paddingLeft : "20px"
+              }}
+            >
+              Users
+            </h1>
+          </Col>
+          <Col>
+          <Input
+          placeholder="Search by any field"
+          value={searchQuery}
+          onChange={handleSearch}
+          style={{ marginBottom: "20px", width: "200px" }}
+        />
+          </Col>
+        </Row>
+      </div>
+
+    
+     
       <div style={{ padding: "20px" }}>
+      
         <Table
-          dataSource={users}
+          dataSource={filteredUsers}
           columns={columns}
           rowKey="id"
           bordered

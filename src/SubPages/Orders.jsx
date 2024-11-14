@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { Table, Button, Modal, Typography, message } from "antd";
-import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Button, Modal, Typography, message, Input , Row , Col } from "antd";
+import { EyeOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentOrder, setCurrentOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { Text, Title } = Typography;
 
@@ -33,7 +34,6 @@ const Orders = () => {
 
     setOrders(sortedOrders);
   };
-
 
   // Delete an order
   const deleteOrder = async (id) => {
@@ -65,6 +65,18 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  // Handle search input change
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
+  // Filter orders based on search query
+  const filteredOrders = orders.filter((order) => 
+    order.orderNumber.toLowerCase().includes(searchQuery) ||
+    order.orderType.toLowerCase().includes(searchQuery) ||
+    (order.totalPrice && order.totalPrice.toString().includes(searchQuery))
+  );
+
   const columns = [
     { title: "Order No.", dataIndex: "orderNumber", key: "orderNumber" },
     {
@@ -79,8 +91,7 @@ const Orders = () => {
         minute: "2-digit",
         second: "2-digit"
       }),
-    }
-    ,
+    },
     { title: "Order Type", dataIndex: "orderType", key: "orderType" },
     {
       title: "Total Price",
@@ -103,12 +114,47 @@ const Orders = () => {
 
   return (
     <>
-      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
-        Orders
-      </h1>
-      <div style={{ padding: "20px" }}>
 
-        <Table dataSource={orders} columns={columns} rowKey="id" bordered pagination={{ pageSize: 5 }} style={{ backgroundColor: "#ffffff" }} />
+<div      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <h1
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+                paddingLeft : "20px"
+              }}
+            >
+               Orders
+            </h1>
+          </Col>
+          <Col>
+          <Input
+          prefix={<SearchOutlined />}
+          placeholder="Search by Order No., Type, or Total Price"
+          value={searchQuery}
+          onChange={handleSearch}
+          style={{ marginBottom: "20px", width: "300px" }}
+        />
+          </Col>
+        </Row>
+      </div>
+
+
+
+      <div style={{ padding: "20px" }}>
+     
+
+        <Table 
+          dataSource={filteredOrders} 
+          columns={columns} 
+          rowKey="id" 
+          bordered 
+          pagination={{ pageSize: 5 }} 
+          style={{ backgroundColor: "#ffffff" }} 
+        />
 
         <Modal
           title="Order Details"
@@ -152,7 +198,6 @@ const Orders = () => {
         </Modal>
       </div>
     </>
-
   );
 };
 
