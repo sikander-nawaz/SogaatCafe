@@ -13,7 +13,6 @@ import { db } from "../Config/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Spin } from "antd";
 import SubNavbarDash from "../Components/SubNavbarDash";
-import moment from "moment";
 
 ChartJS.register(
   CategoryScale,
@@ -96,13 +95,13 @@ export default function Dash() {
   }, [selectedDate]);
 
   // Handle date change from SubNavbarDash component
-  const handleDateChange = (date, dateString) => {
-    if (dateString) {
-      setSelectedDate(moment(dateString));
-    } else {
-      setSelectedDate(null); // Reset selectedDate when no date is selected
-    }
-  };
+  // const handleDateChange = (date, dateString) => {
+  //   if (dateString) {
+  //     setSelectedDate(moment(dateString));
+  //   } else {
+  //     setSelectedDate(null); // Reset selectedDate when no date is selected
+  //   }
+  // };
 
   // Chart data (with fallback values)
   const data = {
