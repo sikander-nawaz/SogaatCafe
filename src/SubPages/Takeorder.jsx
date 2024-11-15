@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
 import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
 import { List, Button, Card, message, Select, Input, Row, Col } from "antd";
+import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const Takeorder = () => {
   const [categories, setCategories] = useState([]);
@@ -195,17 +196,28 @@ const Takeorder = () => {
             renderItem={(item, index) => (
               <List.Item
                 actions={[
-                  <Button onClick={() => updateQuantity(index, -1)}>-</Button>,
+                  <Button
+                    icon={<MinusOutlined />}
+                    onClick={() => updateQuantity(index, -1)}
+                  />,
                   <span>{item.quantity}</span>,
-                  <Button onClick={() => updateQuantity(index, 1)}>+</Button>,
-                  <Button danger onClick={() => removeProduct(index)}>Remove</Button>
+                  <Button
+                    icon={<PlusOutlined />}
+                    onClick={() => updateQuantity(index, 1)}
+                  />,
+                  <Button
+                    type="text"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => removeProduct(index)}
+                  />
                 ]}
               >
                 {item.product} - {item.price} RS each
               </List.Item>
             )}
           />
-          <h3>Total: {totalPrice} RS</h3>
+          <h3 style={{paddingTop : "5px"}} >Total: {totalPrice} RS</h3>
 
           <h4>Select Order Type</h4>
           <div style={{ marginBottom: "10px" }}>
