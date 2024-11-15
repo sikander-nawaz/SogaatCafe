@@ -222,14 +222,22 @@ const Product = () => {
               Products
             </Title>
           </Col>
-          <Col>
-            <Input
-              placeholder="Search by product name"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              style={{ width: 300 }}
-            />
-          </Col>
+
+          <Row gutter={16}>
+            <Col>
+              <Input
+                placeholder="Search by product name"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                style={{ width: 300 }}
+              />
+            </Col>
+            <Col>
+              <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                Add Product
+              </Button>
+            </Col>
+          </Row>
         </Row>
       </div>
 
@@ -280,13 +288,6 @@ const Product = () => {
             placeholder="Enter price"
           />
         </Modal>
-        <Button
-          type="primary"
-          onClick={() => setIsModalVisible(true)}
-          style={{ marginBottom: "20px" }}
-        >
-          Add Product
-        </Button>
       </div>
     </>
   );
