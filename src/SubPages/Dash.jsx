@@ -114,7 +114,7 @@ export default function Dashboard() {
                   fontFamily: "Times New Roman",
                   fontWeight: "bold",
                   color: "#333",
-                  marginBottom: 0,
+                  marginBottom: "0px",
                 }}
               >
                 Dashboard
