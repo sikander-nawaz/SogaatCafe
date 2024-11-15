@@ -166,13 +166,23 @@ const Category = () => {
               Categories
             </Title>
           </Col>
+
           <Col>
-            <Input
-              placeholder="Search Category"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: "300px" }}
-            />
+            <Row gutter={16}>
+              <Col>
+                <Input
+                  placeholder="Search Category"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ width: "300px" }}
+                />
+              </Col>
+              <Col>
+                <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                  Add Category
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>
@@ -212,14 +222,6 @@ const Category = () => {
             placeholder="Enter description"
           />
         </Modal>
-
-        <Button
-          type="primary"
-          onClick={() => setIsModalVisible(true)}
-          style={{ marginTop: "20px" }}
-        >
-          Add Category
-        </Button>
       </div>
     </>
   );
