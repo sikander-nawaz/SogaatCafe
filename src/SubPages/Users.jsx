@@ -178,13 +178,23 @@ const Users = () => {
               Users
             </Title>
           </Col>
+
           <Col>
-            <Input
-              placeholder="Search by any field"
-              value={searchQuery}
-              onChange={handleSearch}
-              style={{ width: 300 }}
-            />
+            <Row gutter={16}>
+              <Col>
+                <Input
+                  placeholder="Search by any field"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  style={{ width: 300 }}
+                />
+              </Col>
+              <Col>
+                <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                  Add User
+                </Button>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>
@@ -237,13 +247,13 @@ const Users = () => {
             }
           />
         </Modal>
-        <Button
+        {/* <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
           style={{ marginBottom: "20px" }}
         >
           Add User
-        </Button>
+        </Button> */}
       </div>
     </>
   );
