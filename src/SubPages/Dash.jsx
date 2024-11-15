@@ -105,7 +105,17 @@ export default function Dashboard() {
         <Row justify="space-between" align="middle">
           <Col>
             <Typography.Title level={3} style={{ margin: 0 }}> {/* Use Typography.Title here */}
+              <span
+              style={{
+                fontFamily: "Times New Roman",
+                fontWeight: "bold",
+                color: "#333",
+                marginBottom: 0,
+              }}
+              >
+                
               Dashboard
+              </span>
             </Typography.Title>
           </Col>
           <Col>
