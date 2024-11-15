@@ -106,7 +106,7 @@ const Login = () => {
             style={{ objectFit: "cover", borderRadius: "10px" }}
           />
           <div className="mb-4 text-center">
-            <h4 style={{ fontWeight: "bold" }}>Login to your Account</h4>
+            <h4 style={{ fontWeight: "bold" }}>LogIn to your Account</h4>
           </div>
           <form onSubmit={handleLogin}>
             <div className="mb-3">
