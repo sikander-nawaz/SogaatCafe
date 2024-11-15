@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip, Legend } from "chart.js";
 import { db } from "../Config/Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { DatePicker, Spin, Row, Col, Typography } from "antd"; // Import Typography here
+import { DatePicker, Spin, Row, Col, Typography, Select } from "antd";
 import dayjs from "dayjs";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend);
@@ -12,6 +12,7 @@ export default function Dashboard() {
   const [orderTypeData, setOrderTypeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [datePickerMode, setDatePickerMode] = useState("month"); // Default to month picker
 
   const getOrderTypeData = async () => {
     try {
@@ -27,9 +28,12 @@ export default function Dashboard() {
       // Filter orders based on selectedDate
       orders.forEach((order) => {
         const orderDate = dayjs(order.date);
+
+        // Check if selectedDate is for a specific day or month
         if (
           !selectedDate ||
-          (selectedDate.isSame(orderDate, 'day') || selectedDate.isSame(orderDate, 'month'))
+          (datePickerMode === "date" && selectedDate.isSame(orderDate, "day")) || // specific day match
+          (datePickerMode === "month" && selectedDate.isSame(orderDate, "month")) // specific month match
         ) {
           orderTypeCounts[order.orderType]++;
         }
@@ -45,7 +49,7 @@ export default function Dashboard() {
   useEffect(() => {
     setLoading(true);
     getOrderTypeData();
-  }, [selectedDate]);
+  }, [selectedDate, datePickerMode]);
 
   const data = {
     labels: ["Dine-In", "Home Delivery", "Take Away"],
@@ -104,27 +108,36 @@ export default function Dashboard() {
       >
         <Row justify="space-between" align="middle">
           <Col>
-            <Typography.Title level={3} style={{ margin: 0 }}> {/* Use Typography.Title here */}
+            <Typography.Title level={3} style={{ margin: 0 }}>
               <span
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-              }}
+                style={{
+                  fontFamily: "Times New Roman",
+                  fontWeight: "bold",
+                  color: "#333",
+                  marginBottom: 0,
+                }}
               >
-                
-              Dashboard
+                Dashboard
               </span>
             </Typography.Title>
           </Col>
           <Col>
             <Row gutter={16}>
               <Col>
+                <Select
+                  defaultValue="month"
+                  style={{ width: 120 }}
+                  onChange={(value) => setDatePickerMode(value)}
+                >
+                  <Select.Option value="month">Month</Select.Option>
+                  <Select.Option value="date">Day</Select.Option>
+                </Select>
+              </Col>
+              <Col>
                 <DatePicker
-                  picker="month"
+                  picker={datePickerMode}
                   onChange={(date) => setSelectedDate(date)}
-                  placeholder="Select Month or Day"
+                  placeholder={`Select ${datePickerMode === "month" ? "Month" : "Day"}`}
                 />
               </Col>
             </Row>
