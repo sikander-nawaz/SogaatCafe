@@ -4,7 +4,7 @@ import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firesto
 import { Table, Button, Modal, Typography, message, Input, Row, Col, Form } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom"; // Import useLocation
-import Image from "../Assets/Images/logo.png";
+import Image from "../Assets/Images/Image.png";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
