@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
-import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
-import { Table, Button, Modal, Typography, message, Input, Row, Col, Form } from "antd";
-import { EyeOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import {
+  Table,
+  Button,
+  Modal,
+  Typography,
+  message,
+  Input,
+  Row,
+  Col,
+  Form,
+} from "antd";
+import {
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { useLocation } from "react-router-dom"; // Import useLocation
-import Image from "../Assets/Images/Image.png";
+import Image from "../assets/images/logo.png";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -22,7 +43,10 @@ const Orders = () => {
   const fetchOrders = async () => {
     const ordersCollectionRef = collection(db, "Orders");
     const data = await getDocs(ordersCollectionRef);
-    const fetchedOrders = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const fetchedOrders = data.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
 
     // Filter orders within the last 36 hours
     const thirtySixHoursAgo = new Date(Date.now() - 36 * 60 * 60 * 1000);
@@ -87,10 +111,11 @@ const Orders = () => {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
-  const filteredOrders = orders.filter((order) =>
-    order.orderNumber.toLowerCase().includes(searchQuery) ||
-    order.orderType.toLowerCase().includes(searchQuery) ||
-    (order.totalPrice && order.totalPrice.toString().includes(searchQuery))
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.orderNumber.toLowerCase().includes(searchQuery) ||
+      order.orderType.toLowerCase().includes(searchQuery) ||
+      (order.totalPrice && order.totalPrice.toString().includes(searchQuery))
   );
 
   const columns = [
@@ -99,14 +124,15 @@ const Orders = () => {
       title: "Date",
       dataIndex: "date",
       key: "date",
-      render: (date) => new Date(date).toLocaleString("en-GB", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      }),
+      render: (date) =>
+        new Date(date).toLocaleString("en-GB", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
     },
     { title: "Order Type", dataIndex: "orderType", key: "orderType" },
     {
@@ -120,10 +146,23 @@ const Orders = () => {
       key: "actions",
       render: (_, record) => (
         <>
-          <Button icon={<EyeOutlined />} onClick={() => viewOrder(record)} style={{ marginRight: "8px" }} />
-          <Button icon={<EditOutlined />} onClick={() => editOrder(record)} style={{ marginRight: "8px" }} />
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => viewOrder(record)}
+            style={{ marginRight: "8px" }}
+          />
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => editOrder(record)}
+            style={{ marginRight: "8px" }}
+          />
           {location.pathname === "/dashboard" && ( // Show Delete button only on Dashboard route
-            <Button icon={<DeleteOutlined />} danger loading={isDeleting} onClick={() => deleteOrder(record.id)} />
+            <Button
+              icon={<DeleteOutlined />}
+              danger
+              loading={isDeleting}
+              onClick={() => deleteOrder(record.id)}
+            />
           )}
         </>
       ),
@@ -141,7 +180,7 @@ const Orders = () => {
                 fontWeight: "bold",
                 color: "#333",
                 marginBottom: 0,
-                paddingLeft: "20px"
+                paddingLeft: "20px",
               }}
             >
               Orders
@@ -185,8 +224,12 @@ const Orders = () => {
         >
           {currentOrder && (
             <div>
-              <Title level={4} style={{ textAlign: "center" }}>Bill</Title>
-              <Text><strong>Date:</strong> {currentOrder.date}</Text>
+              <Title level={4} style={{ textAlign: "center" }}>
+                Bill
+              </Title>
+              <Text>
+                <strong>Date:</strong> {currentOrder.date}
+              </Text>
               <img
                 src={Image}
                 alt=""
@@ -201,18 +244,36 @@ const Orders = () => {
                 rowKey={(record) => record.id}
                 style={{ marginTop: "10px", marginBottom: "10px" }}
                 columns={[
-                  { title: "QTY", dataIndex: "quantity", key: "quantity", width: 80 },
-                  { title: "Order", dataIndex: "product", key: "product", render: (product) => <Text>{product}</Text> },
-                  { title: "Amount", dataIndex: "price", key: "price", render: (price) => `${price} RS`, width: 100 },
+                  {
+                    title: "QTY",
+                    dataIndex: "quantity",
+                    key: "quantity",
+                    width: 80,
+                  },
+                  {
+                    title: "Order",
+                    dataIndex: "product",
+                    key: "product",
+                    render: (product) => <Text>{product}</Text>,
+                  },
+                  {
+                    title: "Amount",
+                    dataIndex: "price",
+                    key: "price",
+                    render: (price) => `${price} RS`,
+                    width: 100,
+                  },
                 ]}
               />
 
               <div style={{ textAlign: "right", marginTop: "10px" }}>
-                <Text strong>Total Amount:</Text> <Text>{currentOrder.totalPrice} RS</Text>
+                <Text strong>Total Amount:</Text>{" "}
+                <Text>{currentOrder.totalPrice} RS</Text>
               </div>
 
               <div style={{ textAlign: "center", marginTop: "20px" }}>
-                <Text strong>Order No.:</Text> <Text>{currentOrder.orderNumber}</Text>
+                <Text strong>Order No.:</Text>{" "}
+                <Text>{currentOrder.orderNumber}</Text>
               </div>
             </div>
           )}
@@ -232,7 +293,10 @@ const Orders = () => {
                 <Input
                   value={editingOrder.orderType}
                   onChange={(e) =>
-                    setEditingOrder({ ...editingOrder, orderType: e.target.value })
+                    setEditingOrder({
+                      ...editingOrder,
+                      orderType: e.target.value,
+                    })
                   }
                 />
               </Form.Item>
@@ -240,7 +304,10 @@ const Orders = () => {
                 <Input
                   value={editingOrder.totalPrice}
                   onChange={(e) =>
-                    setEditingOrder({ ...editingOrder, totalPrice: parseFloat(e.target.value) })
+                    setEditingOrder({
+                      ...editingOrder,
+                      totalPrice: parseFloat(e.target.value),
+                    })
                   }
                 />
               </Form.Item>
