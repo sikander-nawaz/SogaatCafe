@@ -27,6 +27,8 @@ import {
 import { useLocation } from "react-router-dom"; // Import useLocation
 import Image from "../assets/images/logo.png";
 
+const { Title } = Typography;
+
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -171,20 +173,18 @@ const Orders = () => {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
         <Row justify="space-between" align="middle">
           <Col>
-            <h1
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-                paddingLeft: "20px",
-              }}
-            >
+            <Title level={3} style={{ margin: 0 }}>
               Orders
-            </h1>
+            </Title>
           </Col>
           <Col>
             <Input
@@ -192,7 +192,7 @@ const Orders = () => {
               placeholder="Search by Order No., Type, or Total Price"
               value={searchQuery}
               onChange={handleSearch}
-              style={{ marginBottom: "20px", width: "300px" }}
+              style={{ width: "300px" }}
             />
           </Col>
         </Row>

@@ -197,10 +197,7 @@ const Product = () => {
 
   return (
     <>
-
-
-
-      <div      >
+      <div>
         <Row justify="space-between" align="middle">
           <Col>
             <h1
@@ -209,7 +206,7 @@ const Product = () => {
                 fontWeight: "bold",
                 color: "#333",
                 marginBottom: 0,
-                paddingLeft: "20px"
+                paddingLeft: "20px",
               }}
             >
               Products
@@ -227,7 +224,6 @@ const Product = () => {
       </div>
 
       <div style={{ padding: "20px" }}>
-
         <Table
           dataSource={filteredProducts}
           columns={columns}

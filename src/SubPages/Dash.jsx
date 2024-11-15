@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title as ChartTitle,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { db } from "../Config/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { DatePicker, Spin, Row, Col, Typography, Select } from "antd";
 import dayjs from "dayjs";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ChartTitle,
+  Tooltip,
+  Legend
+);
+
+const { Title } = Typography;
 
 export default function Dashboard() {
   const [orderTypeData, setOrderTypeData] = useState([]);
@@ -32,8 +49,10 @@ export default function Dashboard() {
         // Check if selectedDate is for a specific day or month
         if (
           !selectedDate ||
-          (datePickerMode === "date" && selectedDate.isSame(orderDate, "day")) || // specific day match
-          (datePickerMode === "month" && selectedDate.isSame(orderDate, "month")) // specific month match
+          (datePickerMode === "date" &&
+            selectedDate.isSame(orderDate, "day")) || // specific day match
+          (datePickerMode === "month" &&
+            selectedDate.isSame(orderDate, "month")) // specific month match
         ) {
           orderTypeCounts[order.orderType]++;
         }
@@ -55,7 +74,7 @@ export default function Dashboard() {
     labels: ["Dine-In", "Home Delivery", "Take Away"],
     datasets: [
       {
-        label: "Orders",
+        label: " ",
         data: [
           orderTypeData["Dine-In"],
           orderTypeData["Home Delivery"],
@@ -89,7 +108,11 @@ export default function Dashboard() {
         position: "top",
         labels: { font: { size: 14 } },
       },
-      title: { display: true, text: "Order Types Overview", font: { size: 18 } },
+      title: {
+        display: true,
+        text: "Order Types Overview",
+        font: { size: 18 },
+      },
     },
     scales: {
       x: { ticks: { font: { size: 14 }, color: "#555" } },
@@ -108,18 +131,9 @@ export default function Dashboard() {
       >
         <Row justify="space-between" align="middle">
           <Col>
-            <Typography.Title level={3} style={{ margin: 0 }}>
-              <span
-                style={{
-                  fontFamily: "Times New Roman",
-                  fontWeight: "bold",
-                  color: "#333",
-                  marginBottom: "0px",
-                }}
-              >
-                Dashboard
-              </span>
-            </Typography.Title>
+            <Title level={3} style={{ margin: 0 }}>
+              Dashboard
+            </Title>
           </Col>
           <Col>
             <Row gutter={16}>
@@ -137,7 +151,9 @@ export default function Dashboard() {
                 <DatePicker
                   picker={datePickerMode}
                   onChange={(date) => setSelectedDate(date)}
-                  placeholder={`Select ${datePickerMode === "month" ? "Month" : "Day"}`}
+                  placeholder={`Select ${
+                    datePickerMode === "month" ? "Month" : "Day"
+                  }`}
                 />
               </Col>
             </Row>
@@ -146,11 +162,27 @@ export default function Dashboard() {
       </div>
 
       {loading ? (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", paddingTop: "120px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingTop: "120px",
+          }}
+        >
           <Spin size="large" />
         </div>
       ) : (
-        <div style={{ margin: "20px auto", backgroundColor: "#f9f9f9", borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", padding: "20px", maxWidth: "800px" }}>
+        <div
+          style={{
+            margin: "20px auto",
+            backgroundColor: "#f9f9f9",
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            padding: "20px",
+            maxWidth: "800px",
+          }}
+        >
           <Bar data={data} options={options} />
         </div>
       )}

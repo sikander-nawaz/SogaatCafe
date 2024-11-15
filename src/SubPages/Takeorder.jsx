@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/Firebase";
 import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
-import { List, Button, Card, message, Select, Input, Row, Col } from "antd";
+import {
+  List,
+  Button,
+  Card,
+  message,
+  Select,
+  Input,
+  Row,
+  Col,
+  Typography,
+} from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 const Takeorder = () => {
   const [categories, setCategories] = useState([]);
@@ -12,7 +24,8 @@ const Takeorder = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const generateOrderNumber = () => `ORD-${Math.floor(Math.random() * 1000000)}`;
+  const generateOrderNumber = () =>
+    `ORD-${Math.floor(Math.random() * 1000000)}`;
 
   const fetchCategoriesWithProducts = async () => {
     const categoryCollectionRef = collection(db, "Category");
@@ -54,10 +67,7 @@ const Takeorder = () => {
       setSelectedProducts(updatedProducts);
       setTotalPrice((prev) => prev + parseFloat(product.price));
     } else {
-      setSelectedProducts((prev) => [
-        ...prev,
-        { ...product, quantity: 1 },
-      ]);
+      setSelectedProducts((prev) => [...prev, { ...product, quantity: 1 }]);
       setTotalPrice((prev) => prev + parseFloat(product.price));
     }
   };
@@ -113,9 +123,10 @@ const Takeorder = () => {
     }
   };
 
-  const filteredCategories = selectedCategory === "All"
-    ? categories
-    : categories.filter((category) => category.category === selectedCategory);
+  const filteredCategories =
+    selectedCategory === "All"
+      ? categories
+      : categories.filter((category) => category.category === selectedCategory);
 
   const filteredProducts = (products) =>
     products.filter((product) =>
@@ -124,27 +135,25 @@ const Takeorder = () => {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
         <Row justify="space-between" align="middle">
           <Col>
-            <h1
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-                paddingLeft: "20px"
-              }}
-            >
+            <Title level={3} style={{ margin: 0 }}>
               Take Order
-            </h1>
+            </Title>
           </Col>
           <Col>
             <Input
               placeholder="Search Product"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ marginBottom: "20px", width: "300px" }}
+              style={{ width: 300 }}
             />
           </Col>
         </Row>
@@ -170,7 +179,11 @@ const Takeorder = () => {
           {filteredCategories.map((category) => {
             const products = filteredProducts(category.products);
             return products.length > 0 ? (
-              <Card key={category.id} title={category.category} style={{ marginBottom: "20px" }}>
+              <Card
+                key={category.id}
+                title={category.category}
+                style={{ marginBottom: "20px" }}
+              >
                 <List
                   dataSource={products}
                   renderItem={(product) => (
@@ -210,14 +223,14 @@ const Takeorder = () => {
                     danger
                     icon={<DeleteOutlined />}
                     onClick={() => removeProduct(index)}
-                  />
+                  />,
                 ]}
               >
                 {item.product} - {item.price} RS each
               </List.Item>
             )}
           />
-          <h3 style={{paddingTop : "5px"}} >Total: {totalPrice} RS</h3>
+          <h3 style={{ paddingTop: "5px" }}>Total: {totalPrice} RS</h3>
 
           <h4>Select Order Type</h4>
           <div style={{ marginBottom: "10px" }}>
