@@ -8,8 +8,19 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { Table, Button, Modal, Input, message, Row, Col } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Input,
+  message,
+  Row,
+  Col,
+  Typography,
+} from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -142,27 +153,25 @@ const Category = () => {
 
   return (
     <>
-      <div      >
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
         <Row justify="space-between" align="middle">
           <Col>
-            <h1
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-                paddingLeft : "20px"
-              }}
-            >
-              Category
-            </h1>
+            <Title level={3} style={{ margin: 0 }}>
+              Categories
+            </Title>
           </Col>
           <Col>
             <Input
               placeholder="Search Category"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: "200px" }}
+              style={{ width: "300px" }}
             />
           </Col>
         </Row>

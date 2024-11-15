@@ -9,7 +9,19 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table, Button, Modal, Input, Select, message, Row, Col } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Input,
+  Select,
+  message,
+  Row,
+  Col,
+  Typography,
+} from "antd";
+
+const { Title } = Typography;
 
 const Product = () => {
   const [categories, setCategories] = useState([]);
@@ -197,27 +209,25 @@ const Product = () => {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
         <Row justify="space-between" align="middle">
           <Col>
-            <h1
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-                paddingLeft: "20px",
-              }}
-            >
+            <Title level={3} style={{ margin: 0 }}>
               Products
-            </h1>
+            </Title>
           </Col>
           <Col>
             <Input
               placeholder="Search by product name"
               value={searchQuery}
               onChange={handleSearchChange}
-              style={{ marginBottom: "20px", width: "100%" }}
+              style={{ width: 300 }}
             />
           </Col>
         </Row>
