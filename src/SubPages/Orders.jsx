@@ -3,7 +3,8 @@ import { db } from "../Config/Firebase";
 import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { Table, Button, Modal, Typography, message, Input, Row, Col, Form } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
-import Image from "../Assets/Images/logo.png"
+import { useLocation } from "react-router-dom"; // Import useLocation
+import Image from "../Assets/Images/logo.png";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,6 +16,7 @@ const Orders = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { Text, Title } = Typography;
+  const location = useLocation(); // Use useLocation to get the current route
 
   // Fetch orders from the database
   const fetchOrders = async () => {
@@ -52,7 +54,6 @@ const Orders = () => {
   const handlePrint = () => {
     window.print();
   };
-
 
   const viewOrder = (order) => {
     setCurrentOrder(order);
@@ -121,7 +122,9 @@ const Orders = () => {
         <>
           <Button icon={<EyeOutlined />} onClick={() => viewOrder(record)} style={{ marginRight: "8px" }} />
           <Button icon={<EditOutlined />} onClick={() => editOrder(record)} style={{ marginRight: "8px" }} />
-          <Button icon={<DeleteOutlined />} danger loading={isDeleting} onClick={() => deleteOrder(record.id)} />
+          {location.pathname === "/dashboard" && ( // Show Delete button only on Dashboard route
+            <Button icon={<DeleteOutlined />} danger loading={isDeleting} onClick={() => deleteOrder(record.id)} />
+          )}
         </>
       ),
     },
@@ -166,6 +169,7 @@ const Orders = () => {
           style={{ backgroundColor: "#ffffff" }}
         />
 
+        {/* Order Details Modal */}
         <Modal
           title="Order Details"
           visible={isModalVisible}
@@ -203,7 +207,6 @@ const Orders = () => {
                 ]}
               />
 
-
               <div style={{ textAlign: "right", marginTop: "10px" }}>
                 <Text strong>Total Amount:</Text> <Text>{currentOrder.totalPrice} RS</Text>
               </div>
@@ -215,7 +218,7 @@ const Orders = () => {
           )}
         </Modal>
 
-
+        {/* Edit Order Modal */}
         <Modal
           title="Edit Order"
           visible={isEditModalVisible}
