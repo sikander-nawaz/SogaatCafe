@@ -14,7 +14,18 @@ import {
   EyeInvisibleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-import { Table, Button, Modal, Input, message, Row, Col } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Input,
+  message,
+  Row,
+  Col,
+  Typography,
+} from "antd";
+
+const { Title } = Typography;
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -154,38 +165,31 @@ const Users = () => {
 
   return (
     <>
-
-
-<div      >
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
         <Row justify="space-between" align="middle">
           <Col>
-            <h1
-              style={{
-                fontFamily: "Times New Roman",
-                fontWeight: "bold",
-                color: "#333",
-                marginBottom: 0,
-                paddingLeft : "20px"
-              }}
-            >
+            <Title level={3} style={{ margin: 0 }}>
               Users
-            </h1>
+            </Title>
           </Col>
           <Col>
-          <Input
-          placeholder="Search by any field"
-          value={searchQuery}
-          onChange={handleSearch}
-          style={{ marginBottom: "20px", width: "200px" }}
-        />
+            <Input
+              placeholder="Search by any field"
+              value={searchQuery}
+              onChange={handleSearch}
+              style={{ width: 300 }}
+            />
           </Col>
         </Row>
       </div>
 
-    
-     
       <div style={{ padding: "20px" }}>
-      
         <Table
           dataSource={filteredUsers}
           columns={columns}
