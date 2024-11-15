@@ -18,6 +18,7 @@ const Orders = () => {
     const ordersCollectionRef = collection(db, "Orders");
     const data = await getDocs(ordersCollectionRef);
     const fetchedOrders = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    console.log(fetchedOrders);
 
     // Calculate the date 36 hours ago from now
     const thirtySixHoursAgo = new Date(Date.now() - 36 * 60 * 60 * 1000);
@@ -127,7 +128,7 @@ const Orders = () => {
                 paddingLeft : "20px"
               }}
             >
-               Orders
+               Order
             </h1>
           </Col>
           <Col>
