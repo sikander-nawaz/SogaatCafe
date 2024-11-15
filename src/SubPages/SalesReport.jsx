@@ -195,7 +195,7 @@ const SalesReport = () => {
   return (
     <>
       <Navbar
-        title="Sales Report"
+        title="Sales Reports"
         onMonthChange={handleMonthChange}
         onExport={handleExport}
       />
