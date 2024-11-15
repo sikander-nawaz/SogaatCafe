@@ -3,6 +3,7 @@ import { db } from "../Config/Firebase";
 import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { Table, Button, Modal, Typography, message, Input, Row, Col, Form } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import Image from "../Assets/Images/logo.png"
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -182,6 +183,14 @@ const Orders = () => {
             <div>
               <Title level={4} style={{ textAlign: "center" }}>Bill</Title>
               <Text><strong>Date:</strong> {currentOrder.date}</Text>
+              <img
+                src={Image}
+                alt=""
+                width={120}
+                height={130}
+                className="d-block mx-auto"
+                style={{ objectFit: "cover", borderRadius: "10px" }}
+              />
               <Table
                 dataSource={currentOrder.items}
                 pagination={false}
