@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import { db } from "../Config/Firebase"; 
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip, Legend } from "chart.js";
+import { db } from "../Config/Firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { DatePicker, Spin } from "antd";
+import { DatePicker, Spin, Row, Col, Typography } from "antd"; // Import Typography here
 import dayjs from "dayjs";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend);
 
 export default function Dashboard() {
   const [orderTypeData, setOrderTypeData] = useState([]);
@@ -95,16 +95,31 @@ export default function Dashboard() {
 
   return (
     <div className="container">
-      <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333", textAlign: "center" }}>
-        Dashboard
-      </h1>
-
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <DatePicker
-          picker="month"
-          onChange={(date) => setSelectedDate(date)}
-          placeholder="Select Month or Day"
-        />
+      <div
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#f0f2f5",
+          borderBottom: "1px solid #d9d9d9",
+        }}
+      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <Typography.Title level={3} style={{ margin: 0 }}> {/* Use Typography.Title here */}
+              Dashboard
+            </Typography.Title>
+          </Col>
+          <Col>
+            <Row gutter={16}>
+              <Col>
+                <DatePicker
+                  picker="month"
+                  onChange={(date) => setSelectedDate(date)}
+                  placeholder="Select Month or Day"
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </div>
 
       {loading ? (
