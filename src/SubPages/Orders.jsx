@@ -184,7 +184,7 @@ const Orders = () => {
           justify="space-between"
           align="middle"
           style={{
-            paddingRight: "67px",
+            paddingRight: "69px",
           }}
         >
           <Col>
