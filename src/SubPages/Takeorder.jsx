@@ -11,6 +11,8 @@ import {
   Row,
   Col,
   Typography,
+  Table,
+  Radio,
 } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
@@ -23,6 +25,8 @@ const Takeorder = () => {
   const [orderType, setOrderType] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [discount, setDiscount] = useState(0); // New state for discount
+  const [customerAmount, setCustomerAmount] = useState(0); // New state for customer amount
 
   const generateOrderNumber = () =>
     `ORD-${Math.floor(Math.random() * 1000000)}`;
@@ -107,7 +111,7 @@ const Takeorder = () => {
       orderNumber,
       orderType,
       items: selectedProducts,
-      totalPrice,
+      totalPrice, // Only the total price after discount
       date: new Date().toISOString(),
     };
 
@@ -118,6 +122,8 @@ const Takeorder = () => {
       setSelectedProducts([]);
       setTotalPrice(0);
       setOrderType("");
+      setDiscount(0); // Reset discount after order is placed
+      setCustomerAmount(0); // Reset customer amount after order is placed
     } catch (error) {
       message.error("Failed to place the order. Please try again.");
     }
@@ -132,6 +138,57 @@ const Takeorder = () => {
     products.filter((product) =>
       product.product.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+  // Calculate the total amount after applying the discount
+  const totalAmountAfterDiscount = totalPrice - (totalPrice * discount) / 100;
+
+  // Calculate remaining balance (if customer has paid more than totalAmount)
+  const remainingBalance =
+    customerAmount > 0 ? customerAmount - totalAmountAfterDiscount : 0;
+
+  // Adding colomns for table
+  const columns = (updateQuantity, removeProduct) => [
+    {
+      title: "Product",
+      dataIndex: "product",
+      key: "product",
+      width: 120, // Set width to limit space
+    },
+    {
+      title: "Qty",
+      key: "quantity",
+      width: 100,
+      render: (_, record, index) => (
+        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+          <Button
+            icon={<MinusOutlined />}
+            onClick={() => updateQuantity(index, -1)}
+            size="small" // Use smaller buttons
+          />
+          <span>{record.quantity}</span>
+          <Button
+            icon={<PlusOutlined />}
+            onClick={() => updateQuantity(index, 1)}
+            size="small"
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: 60,
+      render: (_, record, index) => (
+        <Button
+          type="text"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={() => removeProduct(index)}
+          size="small"
+        />
+      ),
+    },
+  ];
 
   return (
     <>
@@ -202,59 +259,96 @@ const Takeorder = () => {
           })}
         </div>
 
-        <div style={{ width: "300px", padding: "20px", background: "#f7f7f7" }}>
-          <h3>Selected Products</h3>
-          <List
-            dataSource={selectedProducts}
-            renderItem={(item, index) => (
-              <List.Item
-                actions={[
-                  <Button
-                    icon={<MinusOutlined />}
-                    onClick={() => updateQuantity(index, -1)}
-                  />,
-                  <span>{item.quantity}</span>,
-                  <Button
-                    icon={<PlusOutlined />}
-                    onClick={() => updateQuantity(index, 1)}
-                  />,
-                  <Button
-                    type="text"
-                    danger
-                    icon={<DeleteOutlined />}
-                    onClick={() => removeProduct(index)}
-                  />,
-                ]}
-              >
-                {item.product} - {item.price} RS each
-              </List.Item>
-            )}
+        {/* Bill Screen */}
+        <div
+          style={{
+            width: "300px",
+            padding: " 10px 20px",
+            background: "#f7f7f7",
+          }}
+        >
+          <h4 style={{ textAlign: "center" }}>Selected Products</h4>
+          <Table
+            dataSource={selectedProducts.map((item, index) => ({
+              ...item,
+              key: index, // Add a unique key for each row
+            }))}
+            columns={columns(updateQuantity, removeProduct)}
+            pagination={false} // Disable pagination
+            size="small" // Compact table style
+            // scroll={{ y: 300 }} // Enable horizontal scrolling
+            style={{ width: "100%" }}
           />
-          <h3 style={{ paddingTop: "5px" }}>Total: {totalPrice} RS</h3>
 
-          <h4>Select Order Type</h4>
+          {/* Input tags for amount. */}
+
+          <Row gutter={16} style={{ marginBlock: "10px" }}>
+            {/* First Row: Apply Discount and Total Amount */}
+            <Col span={12}>
+              <p style={{ marginBottom: "6px" }}>
+                <strong>Apply Discount</strong>
+              </p>
+              <Input
+                type="number"
+                value={discount}
+                min={0}
+                max={100}
+                onChange={(e) => setDiscount(Number(e.target.value))}
+                placeholder="Discount Percentage"
+              />
+            </Col>
+            <Col span={12}>
+              <p style={{ marginBottom: "6px" }}>
+                <strong>Total Amount</strong>
+              </p>
+              <Input
+                type="text"
+                value={totalAmountAfterDiscount}
+                readOnly
+                placeholder="Total Amount After Discount"
+              />
+            </Col>
+          </Row>
+          <Row gutter={16} style={{ marginBlock: "10px" }}>
+            {/* Second Row: Amount from Customer and Remaining Balance */}
+            <Col span={12}>
+              <p style={{ marginBottom: "6px" }}>
+                <strong>Amount Ten.</strong>
+              </p>
+              <Input
+                type="number"
+                value={customerAmount}
+                onChange={(e) => setCustomerAmount(Number(e.target.value))}
+                placeholder="Amount from Customer"
+              />
+            </Col>
+            <Col span={12}>
+              <p style={{ marginBottom: "6px" }}>
+                <strong>Rem. Bal.</strong>
+              </p>
+              <Input
+                type="text"
+                value={remainingBalance}
+                readOnly
+                placeholder="Remaining Balance"
+              />
+            </Col>
+          </Row>
+
+          {/* Radio Buttons. */}
+
           <div style={{ marginBottom: "10px" }}>
-            <Button
-              type={orderType === "Dine-In" ? "primary" : "default"}
-              onClick={() => setOrderType("Dine-In")}
-              style={{ marginRight: "5px" }}
+            <Radio.Group
+              value={orderType}
+              onChange={(e) => setOrderType(e.target.value)}
             >
-              Dine-In
-            </Button>
-            <Button
-              type={orderType === "Home Delivery" ? "primary" : "default"}
-              onClick={() => setOrderType("Home Delivery")}
-              style={{ marginRight: "5px" }}
-            >
-              Home Delivery
-            </Button>
-            <Button
-              type={orderType === "Take Away" ? "primary" : "default"}
-              onClick={() => setOrderType("Take Away")}
-            >
-              Take Away
-            </Button>
+              <Radio value="Dine-In">Dine-In</Radio>
+              <Radio value="Home Delivery">Home Del.</Radio>
+              <Radio value="Take Away">Take</Radio>
+            </Radio.Group>
           </div>
+
+          {/* Place Order Button. */}
 
           <Button
             type="primary"
