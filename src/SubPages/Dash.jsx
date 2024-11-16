@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -29,7 +30,18 @@ export default function Dashboard() {
   const [orderTypeData, setOrderTypeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [datePickerMode, setDatePickerMode] = useState("month"); // Default to month picker
+  const [datePickerMode, setDatePickerMode] = useState("date"); // Default to "day"
+
+  const location = useLocation(); // Hook to get current route
+
+  useEffect(() => {
+    // Update the datePickerMode based on the route
+    if (location.pathname === "/dashboard") {
+      setDatePickerMode("month"); // Show "month" picker in Dashboard
+    } else {
+      setDatePickerMode("date"); // Show "date" picker in Home
+    }
+  }, [location.pathname]);
 
   const getOrderTypeData = async () => {
     try {
@@ -46,7 +58,6 @@ export default function Dashboard() {
       orders.forEach((order) => {
         const orderDate = dayjs(order.date);
 
-        // Check if selectedDate is for a specific day or month
         if (
           !selectedDate ||
           (datePickerMode === "date" &&
@@ -137,16 +148,18 @@ export default function Dashboard() {
           </Col>
           <Col>
             <Row gutter={16}>
-              <Col>
-                <Select
-                  defaultValue="month"
-                  style={{ width: 120 }}
-                  onChange={(value) => setDatePickerMode(value)}
-                >
-                  <Select.Option value="month">Month</Select.Option>
-                  <Select.Option value="date">Day</Select.Option>
-                </Select>
-              </Col>
+              {location.pathname === "/dashboard" && (
+                <Col>
+                  <Select
+                    defaultValue="month"
+                    style={{ width: 120 }}
+                    onChange={(value) => setDatePickerMode(value)}
+                  >
+                    <Select.Option value="month">Month</Select.Option>
+                    <Select.Option value="date">Day</Select.Option>
+                  </Select>
+                </Col>
+              )}
               <Col>
                 <DatePicker
                   picker={datePickerMode}

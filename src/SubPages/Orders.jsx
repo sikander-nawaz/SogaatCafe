@@ -25,7 +25,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom"; // Import useLocation
-import Image from "../assets/images/logo.png";
+import Image from "../Assets/Images/logo.png";
 
 const { Title } = Typography;
 
