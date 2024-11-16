@@ -1,17 +1,20 @@
 .app {
   display: flex;
-   /* max-height: 100vh; */
+  height: 100vh; /* Ensures the entire app occupies the full viewport height */
 }
 
 .sidebar {
   background-color: #333;
   color: #fff;
   width: 250px;
-   /* height: 100vh;Makes the sidebar stretch to the full viewport height */
+  height: 100vh; /* Sidebar spans the full height of the viewport */
   transition: width 0.3s ease;
   display: flex;
   flex-direction: column;
   padding-top: 20px;
+  position: fixed; /* Keeps the sidebar fixed during scrolling */
+  top: 0;
+  left: 0;
 }
 
 .collapsed .sidebar {
@@ -72,6 +75,12 @@
   flex: 1;
   padding: 20px;
   background-color: #f0f0f0;
+  margin-left: 250px; /* Ensure content is shifted right when sidebar is expanded */
+  transition: margin-left 0.3s ease;
+}
+
+.collapsed ~ .main-content {
+  margin-left: 80px; /* Adjust margin when sidebar is collapsed */
 }
 
 .header {
@@ -83,9 +92,6 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
   .sidebar {
-    position: relative;
-    z-index: 1000;
-    /* height: 100vh; Ensures full viewport height */
     width: 250px;
   }
 

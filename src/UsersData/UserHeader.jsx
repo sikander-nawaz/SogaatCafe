@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space, Menu } from 'antd';
+import { DownOutlined , UserOutlined} from '@ant-design/icons';
+import { Dropdown, Space, Menu , Avatar} from 'antd';
 
 const UserHeader = () => {
     const navigate = useNavigate();
@@ -35,8 +35,10 @@ const UserHeader = () => {
                         >
                             <a onClick={(e) => e.preventDefault()}>
                                 <Space style={{ cursor: "pointer", textDecoration: "none", color: "black", fontSize: "20px" }}>
-                                    Manage Account
-                                    <DownOutlined />
+                                <Avatar
+                                        icon={<UserOutlined />}
+                                        style={{ backgroundColor: '#1677FF' }}
+                                    />
                                 </Space>
                             </a>
                         </Dropdown>
