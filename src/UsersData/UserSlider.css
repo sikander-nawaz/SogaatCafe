@@ -1,152 +1,158 @@
+/* Ensure the base elements take full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main application container */
 .app {
-    display: flex;
-    /* min-height: 100vh; Ensures the app container covers the full viewport height */
-  }
-  
+  display: flex;
+  height: 100%; /* Matches the full height of the viewport */
+}
+
+/* Sidebar styles */
+.sidebar {
+  background: linear-gradient(180deg, #1d1f21, #292c2e);
+  color: #ffffff;
+  width: 250px;
+  height: 100%; /* Ensure it covers full parent height */
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.collapsed .sidebar {
+  width: 80px;
+}
+
+/* Sidebar header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #1b1c1e;
+  border-bottom: 1px solid #444;
+}
+
+/* Logo styles */
+.logo {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  padding-top: 10px;
+}
+
+/* Toggle button */
+.toggle-btn {
+  color: white !important;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+/* Sidebar menu */
+.menu {
+  margin-top: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu-item:hover {
+  background: #3a3d40;
+  color: #ffffff;
+}
+
+.menu-item span {
+  margin-left: 10px;
+}
+
+.collapsed .menu-item span {
+  display: none;
+}
+
+.collapsed .menu-item {
+  justify-content: center;
+}
+
+.menu-item .icon {
+  font-size: 1.5em;
+}
+
+/* Main content styles */
+.main-content {
+  margin-left: 250px;
+  flex-grow: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  height: 100%; /* Ensure alignment with sidebar height */
+}
+
+.collapsed + .main-content {
+  margin-left: 80px;
+}
+
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* Avatar Dropdown */
+.ant-avatar {
+  cursor: pointer;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
   .sidebar {
-    background-color: #333;
-    color: #fff;
-    width: 250px;
-    /* height: 100vh; Makes the sidebar stretch to the full viewport height */
-    transition: width 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-  }
-  
-  .collapsed .sidebar {
-    width: 80px;
-  }
-  
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 45px;
-  }
-  
-  .logo {
-    font-size: 1.2em;
-    padding-left: 20px;
-    font-weight: bold;
-  }
-  
-  .toggle-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1.2em;
-  }
-  
-  .menu {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    flex: 1; /* Ensures the menu section expands to fill remaining space */
-  }
-  
-  .menu-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    cursor: pointer;
-    color: #fff;
-    transition: background 0.3s;
-  }
-  
-  .menu-item:hover {
-    background-color: #444;
-  }
-  
-  .menu-item span {
-    margin-left: 15px;
-    font-size: 1em;
-  }
-  
-  .collapsed .menu-item span {
-    display: none;
-  }
-  
-  .main-content {
-    flex: 1;
-    padding: 20px;
-    background-color: #f0f0f0;
-  }
-  
-  .header {
-    margin-top: 20px;
-    font-size: 1.5em;
-    font-weight: bold;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .sidebar {
-      position: relative;
-      z-index: 1000;
-      height: 100vh; /* Ensures full viewport height */
-      width: 250px;
-    }
-  
-    .collapsed .sidebar {
-      width: 80px;
-    }
-  
-    .main-content {
-      margin-left: 0;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .sidebar {
       width: 200px;
-    }
-  
-    .collapsed .sidebar {
-      width: 80px;
-    }
-  
-    .sidebar-header {
-      padding-right: 15px;
-    }
-  
-    .menu-item {
-      padding: 12px 15px;
-    }
-  
-    .menu-item span {
-      font-size: 0.9em;
-    }
   }
-  
-  @media (max-width: 300px) {
-    .sidebar {
-      width: 180px;
-    }
-  
-    .collapsed .sidebar {
-      width: 60px;
-    }
-  
-    .menu-item {
-      padding: 10px 10px;
-    }
-  
-    .toggle-btn {
-      font-size: 1em;
-    }
-  
-    .menu-item span {
-      font-size: 0.8em;
-    }
-  
-    .main-content {
-      padding: 15px;
-    }
-  
-    .header {
-      font-size: 1.3em;
-    }
+
+  .collapsed .sidebar {
+      width: 70px;
   }
-  
+
+  .main-content {
+      margin-left: 200px;
+  }
+
+  .collapsed + .main-content {
+      margin-left: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 100%;
+      height: auto;
+      position: static;
+  }
+
+  .collapsed .sidebar {
+      width: 100%;
+  }
+
+  .main-content {
+      margin-left: 0;
+  }
+}

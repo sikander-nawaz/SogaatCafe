@@ -7,7 +7,7 @@ import UserSlider from '../UsersData/UserSlider';
 
         return (
             <>
-               <UserHeader/>
+               {/* <UserHeader/> */}
                <UserSlider/>
             </>
         );

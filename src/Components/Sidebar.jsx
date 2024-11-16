@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaHome, FaList, FaBox, FaChartLine, FaUsers, FaBars } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Dropdown, Space, Menu, Modal, Input, message, Avatar } from 'antd';
+import { db } from "../Config/Firebase";
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+
 import './Sidebar.css';
+
 import Users from '../SubPages/Users';
 import Orders from '../SubPages/Orders';
 import Category from "../SubPages/Category";
@@ -9,31 +16,85 @@ import SalesReport from "../SubPages/SalesReport";
 import Takeorder from "../SubPages/Takeorder";
 import Dash from '../SubPages/Dash';
 
-
 const Sidebar = () => {
+  const [admindata, setAdmindata] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [currentAdminId, setCurrentAdminId] = useState(null);
+
   const [collapsed, setCollapsed] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState('Dashboard');
 
-  const toggleSidebar = () => {
-    setCollapsed(!collapsed);
+  const navigate = useNavigate();
+
+  const collectionRef = collection(db, "Admin");
+
+  const getdata = async () => {
+    try {
+      setLoading(true);
+      const data = await getDocs(collectionRef);
+      const filterData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      if (filterData.length > 0) {
+        setAdmindata(filterData);
+        setAdminEmail(filterData[0].email);
+        setAdminPassword(filterData[0].password);
+        setCurrentAdminId(filterData[0].id);
+      }
+    } catch (error) {
+      console.error("Error Fetching Data...", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    getdata();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userPassword');
+    navigate('/');
+  };
+
+  const handleUpdateProfile = async () => {
+    if (!currentAdminId) return;
+
+    try {
+      const adminRef = doc(db, 'Admin', currentAdminId);
+      await updateDoc(adminRef, { email: adminEmail, password: adminPassword });
+      setIsUpdateModalVisible(false);
+      message.success('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile: ', error);
+      message.error('Error updating profile');
+    }
+  };
+
+  const menuItems = [
+    { key: '1', label: 'My Account', disabled: true },
+    { type: 'divider' },
+    { key: '4', label: <span onClick={() => setIsUpdateModalVisible(true)}><SettingOutlined /> Update Profile</span> },
+    { type: 'divider' },
+    { key: '6', label: <span style={{ color: 'red' }} onClick={handleLogout}>Logout</span> },
+  ];
 
   const renderComponent = () => {
     switch (selectedComponent) {
-      case 'Users':
-        return <Users />;
-      case 'Orders':
-        return <Orders />;
-      case 'Category':
-        return <Category />;
-      case 'Product':
-        return <Product />;
-      case 'SalesReport':
-        return <SalesReport />;
-      case 'TakeOrder':
-        return <Takeorder />;
-      default:
-        return <Dash/>;
+      case 'Users': return <Users />;
+      case 'Orders': return <Orders />;
+      case 'Category': return <Category />;
+      case 'Product': return <Product />;
+      case 'SalesReport': return <SalesReport />;
+      case 'TakeOrder': return <Takeorder />;
+      default: return <Dash />;
     }
   };
 
@@ -42,48 +103,45 @@ const Sidebar = () => {
       <div className="sidebar">
         <div className="sidebar-header">
           <h1 className="logo">{!collapsed && 'Sogaat Flavour'}</h1>
-          <button className="toggle-btn" onClick={toggleSidebar}>
-            <FaBars />
-          </button>
+          <button className="toggle-btn" onClick={() => setCollapsed(!collapsed)}><FaBars /></button>
         </div>
         <div className="menu">
-          <div className="menu-item" onClick={() => setSelectedComponent('Dashboard')}>
-            <FaHome />
-            {!collapsed && <span>Dashboard</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('Orders')}>
-            <FaList />
-            {!collapsed && <span>Orders</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('TakeOrder')}>
-            <FaBox />
-            {!collapsed && <span>Take Orders</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('Category')}>
-            <FaBox />
-            {!collapsed && <span>Categories</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('Product')}>
-            <FaBox />
-            {!collapsed && <span>Products</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('SalesReport')}>
-            <FaChartLine />
-            {!collapsed && <span>Sales Report</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('Users')}>
-            <FaUsers />
-            {!collapsed && <span>Users</span>}
-          </div>
+          {[  
+            { label: 'Dashboard', icon: <FaHome /> },
+            { label: 'Orders', icon: <FaList /> },
+            { label: 'TakeOrder', icon: <FaBox /> },
+            { label: 'Category', icon: <FaBox /> },
+            { label: 'Product', icon: <FaBox /> },
+            { label: 'SalesReport', icon: <FaChartLine /> },
+            { label: 'Users', icon: <FaUsers /> },
+          ].map((item, index) => (
+            <div key={index} className="menu-item" onClick={() => setSelectedComponent(item.label)}>
+              {item.icon}
+              {!collapsed && <span>{item.label}</span>}
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Main Cont */}
-      <main className="main-content">
-        <div className="header">
-          {renderComponent()}
+      <div className="main-content">
+        <div className="header d-flex justify-content-end">
+          <Dropdown overlay={<Menu items={menuItems} />} trigger={['click']}>
+            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#1677FF', cursor: 'pointer' }} />
+          </Dropdown>
         </div>
-      </main>
+        {renderComponent()}
+      </div>
+
+      <Modal
+        title="Update Profile"
+        visible={isUpdateModalVisible}
+        onCancel={() => setIsUpdateModalVisible(false)}
+        onOk={handleUpdateProfile}
+        okText="Update"
+      >
+        <Input placeholder="Email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} />
+        <Input.Password placeholder="Password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} />
+      </Modal>
     </div>
   );
 };

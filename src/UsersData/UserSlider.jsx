@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
-import { FaHome, FaList, FaBox, FaChartLine, FaUsers, FaBars } from 'react-icons/fa';
+import { FaHome, FaList, FaBox, FaBars } from 'react-icons/fa';
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { Dropdown, Space, Menu, Avatar } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
 import './UserSlider.css';
+
 import Orders from '../SubPages/Orders';
-import Takeorder from "../SubPages/Takeorder";
+import Takeorder from '../SubPages/Takeorder';
 import Dash from '../SubPages/Dash';
 
-
-const UserSlider = () => {
+const UserSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState('Dashboard');
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/');
+  };
+
+  const items = [
+    { key: '1', label: 'My Account', disabled: true },
+    { type: 'divider' },
+    { key: '6', label: 'Logout', onClick: handleLogout, style: { color: 'red' } },
+  ];
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -21,7 +38,7 @@ const UserSlider = () => {
       case 'TakeOrder':
         return <Takeorder />;
       default:
-        return <Dash/>;
+        return <Dash />;
     }
   };
 
@@ -35,29 +52,36 @@ const UserSlider = () => {
           </button>
         </div>
         <div className="menu">
-          <div className="menu-item" onClick={() => setSelectedComponent('Dashboard')}>
-            <FaHome />
-            {!collapsed && <span>Dashboard</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('Orders')}>
-            <FaList />
-            {!collapsed && <span>Orders</span>}
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComponent('TakeOrder')}>
-            <FaBox />
-            {!collapsed && <span>Take Orders</span>}
-          </div>
+          {[
+            { label: 'Dashboard', icon: <FaHome />, key: 'Dashboard' },
+            { label: 'Orders', icon: <FaList />, key: 'Orders' },
+            { label: 'TakeOrder', icon: <FaBox />, key: 'TakeOrder' },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className={`menu-item ${selectedComponent === item.key ? 'active' : ''}`}
+              onClick={() => setSelectedComponent(item.key)}
+            >
+              {item.icon}
+              {!collapsed && <span>{item.label}</span>}
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Main Cont */}
-      <main className="main-content">
-        <div className="header">
-          {renderComponent()}
+      <div className="main-content">
+        <div className="header d-flex justify-content-end">
+          <Dropdown overlay={<Menu items={items} />} trigger={['click']}>
+            <Avatar
+              icon={<UserOutlined />}
+              style={{ backgroundColor: '#1677FF', cursor: 'pointer' }}
+            />
+          </Dropdown>
         </div>
-      </main>
+        {renderComponent()}
+      </div>
     </div>
   );
 };
 
-export default UserSlider;
+export default UserSidebar;

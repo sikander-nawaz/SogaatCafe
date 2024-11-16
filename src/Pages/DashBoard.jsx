@@ -8,8 +8,6 @@ const DashBoard = () => {
 
   return (
     <>
-      <Header/>
-     
       <Sidebar/>
     </>
   );

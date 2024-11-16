@@ -94,7 +94,11 @@ const Header = () => {
             <div className="container-fluid" style={{ backgroundColor: "#F0F0F0" }}>
                 <div className="row" style={{ padding: "5px" }}>
                     <div className="col-8">
-                    
+                    <h1 style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333" }}>
+                            <marquee behavior="scroll" direction="right" scrollamount="10">
+                                Welcome to Sogat
+                            </marquee>
+                        </h1>
                     </div>
                     <div className="col-4 d-flex justify-content-end pt-3">
                         <Dropdown
