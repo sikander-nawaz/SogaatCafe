@@ -1,32 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { FaHome, FaList, FaBox, FaChartLine, FaUsers, FaBars } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Dropdown, Space, Menu, Modal, Input, message, Avatar } from 'antd';
+import React, { useState, useEffect } from "react";
+import {
+  FaHome,
+  FaList,
+  FaBox,
+  FaChartLine,
+  FaUsers,
+  FaBars,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { Dropdown, Space, Menu, Modal, Input, message, Avatar } from "antd";
 import { db } from "../Config/Firebase";
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 
-import './Sidebar.css';
+import "./Sidebar.css";
 
-import Users from '../SubPages/Users';
-import Orders from '../SubPages/Orders';
+import Users from "../SubPages/Users";
+import Orders from "../SubPages/Orders";
 import Category from "../SubPages/Category";
 import Product from "../SubPages/Product";
 import SalesReport from "../SubPages/SalesReport";
 import Takeorder from "../SubPages/Takeorder";
-import Dash from '../SubPages/Dash';
+import Dash from "../SubPages/Dash";
 
 const Sidebar = () => {
   const [admindata, setAdmindata] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
-  const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [currentAdminId, setCurrentAdminId] = useState(null);
 
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedComponent, setSelectedComponent] = useState('Dashboard');
+  const [selectedComponent, setSelectedComponent] = useState("Dashboard");
 
   const navigate = useNavigate();
 
@@ -58,64 +65,94 @@ const Sidebar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userPassword');
-    navigate('/');
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPassword");
+    navigate("/");
   };
 
   const handleUpdateProfile = async () => {
     if (!currentAdminId) return;
 
     try {
-      const adminRef = doc(db, 'Admin', currentAdminId);
+      const adminRef = doc(db, "Admin", currentAdminId);
       await updateDoc(adminRef, { email: adminEmail, password: adminPassword });
       setIsUpdateModalVisible(false);
-      message.success('Profile updated successfully!');
+      message.success("Profile updated successfully!");
     } catch (error) {
-      console.error('Error updating profile: ', error);
-      message.error('Error updating profile');
+      console.error("Error updating profile: ", error);
+      message.error("Error updating profile");
     }
   };
 
   const menuItems = [
-    { key: '1', label: 'My Account', disabled: true },
-    { type: 'divider' },
-    { key: '4', label: <span onClick={() => setIsUpdateModalVisible(true)}><SettingOutlined /> Update Profile</span> },
-    { type: 'divider' },
-    { key: '6', label: <span style={{ color: 'red' }} onClick={handleLogout}>Logout</span> },
+    { key: "1", label: "My Account", disabled: true },
+    { type: "divider" },
+    {
+      key: "4",
+      label: (
+        <span onClick={() => setIsUpdateModalVisible(true)}>
+          <SettingOutlined /> Update Profile
+        </span>
+      ),
+    },
+    { type: "divider" },
+    {
+      key: "6",
+      label: (
+        <span style={{ color: "red" }} onClick={handleLogout}>
+          Logout
+        </span>
+      ),
+    },
   ];
 
   const renderComponent = () => {
     switch (selectedComponent) {
-      case 'Users': return <Users />;
-      case 'Orders': return <Orders />;
-      case 'Category': return <Category />;
-      case 'Product': return <Product />;
-      case 'SalesReport': return <SalesReport />;
-      case 'TakeOrder': return <Takeorder />;
-      default: return <Dash />;
+      case "Users":
+        return <Users />;
+      case "Orders":
+        return <Orders />;
+      case "Category":
+        return <Category />;
+      case "Product":
+        return <Product />;
+      case "SalesReport":
+        return <SalesReport />;
+      case "TakeOrder":
+        return <Takeorder />;
+      default:
+        return <Dash />;
     }
   };
 
   return (
-    <div className={`app ${collapsed ? 'collapsed' : ''}`}>
+    <div className={`app ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar">
         <div className="sidebar-header">
-          <h1 className="logo">{!collapsed && 'Sogaat Flavour'}</h1>
-          <button className="toggle-btn" onClick={() => setCollapsed(!collapsed)}><FaBars /></button>
+          <h1 className="logo">{!collapsed && "Sogaat Flavour"}</h1>
+          <button
+            className="toggle-btn"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <FaBars />
+          </button>
         </div>
         <div className="menu">
-          {[  
-            { label: 'Dashboard', icon: <FaHome /> },
-            { label: 'Orders', icon: <FaList /> },
-            { label: 'TakeOrder', icon: <FaBox /> },
-            { label: 'Category', icon: <FaBox /> },
-            { label: 'Product', icon: <FaBox /> },
-            { label: 'SalesReport', icon: <FaChartLine /> },
-            { label: 'Users', icon: <FaUsers /> },
+          {[
+            { label: "Dashboard", icon: <FaHome /> },
+            { label: "Orders", icon: <FaList /> },
+            { label: "TakeOrder", icon: <FaBox /> },
+            { label: "Category", icon: <FaBox /> },
+            { label: "Product", icon: <FaBox /> },
+            { label: "SalesReport", icon: <FaChartLine /> },
+            { label: "Users", icon: <FaUsers /> },
           ].map((item, index) => (
-            <div key={index} className="menu-item" onClick={() => setSelectedComponent(item.label)}>
+            <div
+              key={index}
+              className="menu-item"
+              onClick={() => setSelectedComponent(item.label)}
+            >
               {item.icon}
               {!collapsed && <span>{item.label}</span>}
             </div>
@@ -125,8 +162,21 @@ const Sidebar = () => {
 
       <div className="main-content">
         <div className="header d-flex justify-content-end">
-          <Dropdown overlay={<Menu items={menuItems} />} trigger={['click']}>
-            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#1677FF', cursor: 'pointer' }} />
+          <Dropdown
+            overlay={<Menu items={menuItems} />}
+            trigger={["click"]}
+            style={{
+              backgroundColor: "#f0f2f5",
+              borderBottom: "1px solid #d9d9d9",
+            }}
+          >
+            <Avatar
+              icon={<UserOutlined />}
+              style={{
+                backgroundColor: "#1677FF",
+                cursor: "pointer",
+              }}
+            />
           </Dropdown>
         </div>
         {renderComponent()}
@@ -139,8 +189,16 @@ const Sidebar = () => {
         onOk={handleUpdateProfile}
         okText="Update"
       >
-        <Input placeholder="Email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} />
-        <Input.Password placeholder="Password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} />
+        <Input
+          placeholder="Email"
+          value={adminEmail}
+          onChange={(e) => setAdminEmail(e.target.value)}
+        />
+        <Input.Password
+          placeholder="Password"
+          value={adminPassword}
+          onChange={(e) => setAdminPassword(e.target.value)}
+        />
       </Modal>
     </div>
   );

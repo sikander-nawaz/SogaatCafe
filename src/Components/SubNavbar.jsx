@@ -19,6 +19,8 @@ const SubNavbar = ({ title, onMonthChange, onExport }) => {
         padding: "10px 20px",
         backgroundColor: "#f0f2f5",
         borderBottom: "1px solid #d9d9d9",
+        marginTop: "-52px",
+        width: "100%",
       }}
     >
       <Row justify="space-between" align="middle">
@@ -27,7 +29,7 @@ const SubNavbar = ({ title, onMonthChange, onExport }) => {
             {title}
           </Title>
         </Col>
-        <Col>
+        <Col style={{ paddingRight: "50px" }}>
           <Row gutter={16}>
             <Col>
               <MonthPicker
