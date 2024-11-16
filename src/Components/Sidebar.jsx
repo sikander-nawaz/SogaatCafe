@@ -161,7 +161,10 @@ const Sidebar = () => {
       </div>
 
       <div className="main-content">
-        <div className="header d-flex justify-content-end">
+        <div
+          className="header d-flex justify-content-end"
+          style={{ position: "absolute", zIndex: "2", marginLeft: "980px" }}
+        >
           <Dropdown
             overlay={<Menu items={menuItems} />}
             trigger={["click"]}

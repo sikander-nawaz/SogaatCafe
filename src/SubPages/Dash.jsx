@@ -147,7 +147,12 @@ export default function Dashboard() {
             </Title>
           </Col>
           <Col>
-            <Row gutter={16}>
+            <Row
+              gutter={16}
+              style={{
+                paddingRight: "60px",
+              }}
+            >
               {location.pathname === "/dashboard" && (
                 <Col>
                   <Select

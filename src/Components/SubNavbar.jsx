@@ -19,8 +19,10 @@ const SubNavbar = ({ title, onMonthChange, onExport }) => {
         padding: "10px 20px",
         backgroundColor: "#f0f2f5",
         borderBottom: "1px solid #d9d9d9",
-        marginTop: "-52px",
+        // marginTop: "-52px",
         width: "100%",
+        // position: "relative", // or 'absolute' if needed
+        // zIndex: 1, // Lower z-index to move it behind
       }}
     >
       <Row justify="space-between" align="middle">
