@@ -1,5 +1,5 @@
 import React from 'react';
-import UserHeader from "../UsersData/UserHeader"
+// import UserHeader from "../UsersData/UserHeader"
 import UserSlider from '../UsersData/UserSlider';
 
     const HomePage = () => {
