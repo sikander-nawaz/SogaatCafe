@@ -120,7 +120,7 @@ const Login = () => {
               />
             </div>
             <label className="form-label">Password</label>
-            <div className="input-group mb-3">
+            <div className="input-group mb-2">
               <input
                 type={passwordVisible ? "text" : "password"}
                 className="form-control"
@@ -136,13 +136,12 @@ const Login = () => {
                 {passwordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </span>
             </div>
-            <div className="mb-1 d-flex justify-content-end">
+            <div className="mb-3 d-flex justify-content-end">
               <span
                 onClick={() => setIsModalVisible(true)}
                 style={{
                   textDecoration: "none",
                   color: "#6366F1",
-                  fontWeight: "bold",
                   cursor: "pointer",
                 }}
               >
@@ -151,7 +150,7 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="btn btn-primary mb-3 mx-auto d-block"
+              className="btn btn-primary mb-3 mx-auto d-block col-12"
               disabled={loading}
             >
               {loading ? (
