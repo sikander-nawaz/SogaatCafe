@@ -172,7 +172,13 @@ const Users = () => {
           borderBottom: "1px solid #d9d9d9",
         }}
       >
-        <Row justify="space-between" align="middle">
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{
+            paddingRight: "70px",
+          }}
+        >
           <Col>
             <Title level={3} style={{ margin: 0 }}>
               Users
