@@ -52,23 +52,23 @@ html, body {
   border: none;
   cursor: pointer;
   font-size: 1.2em;
-  color:  white !important ;
+  color: white !important;
 }
 
 /* Sidebar menu */
-.menu {
-  margin-top: 19px;
+.men {
+  margin: 0; /* Remove extra margin above the menu */
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: column; /* Stack items vertically */
+  padding: 0; /* Remove padding inside the menu */
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
-  font-size: 1.2em;
+  padding: 10px 15px; /* Compact padding for tighter spacing */
+  font-size: 1.1em; /* Slightly smaller text for neatness */
   color: #ccc;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
@@ -124,34 +124,34 @@ html, body {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .sidebar {
-      width: 200px;
+    width: 200px;
   }
 
   .collapsed .sidebar {
-      width: 70px;
+    width: 70px;
   }
 
   .main-content {
-      margin-left: 200px;
+    margin-left: 200px;
   }
 
   .collapsed + .main-content {
-      margin-left: 70px;
+    margin-left: 70px;
   }
 }
 
 @media (max-width: 480px) {
   .sidebar {
-      width: 100%;
-      height: auto;
-      position: static;
+    width: 100%;
+    height: auto;
+    position: static;
   }
 
   .collapsed .sidebar {
-      width: 100%;
+    width: 100%;
   }
 
   .main-content {
-      margin-left: 0;
+    margin-left: 0;
   }
 }

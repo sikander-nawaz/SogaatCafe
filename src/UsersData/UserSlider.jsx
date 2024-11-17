@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { FaHome, FaList, FaBox, FaBars } from "react-icons/fa";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import {  UserOutlined } from "@ant-design/icons";
 import { Dropdown, Space, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import "./UserSlider.css";
+// import "./UserSlider.css";
 
 import Orders from "../SubPages/Orders";
 import Takeorder from "../SubPages/Takeorder";
@@ -56,7 +56,7 @@ const UserSidebar = () => {
             <FaBars />
           </button>
         </div>
-        <div className="menu">
+        <div className="men">
           {[
             { label: "Dashboard", icon: <FaHome />, key: "Dashboard" },
             { label: "Orders", icon: <FaList />, key: "Orders" },
