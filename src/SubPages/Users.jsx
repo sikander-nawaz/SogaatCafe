@@ -190,7 +190,7 @@ const Users = () => {
                   placeholder="Search by any field"
                   value={searchQuery}
                   onChange={handleSearch}
-                  style={{ width: 300 }}
+                  style={{ width: 200 }}
                 />
               </Col>
               <Col>

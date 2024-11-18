@@ -199,7 +199,7 @@ const Orders = () => {
               placeholder="Search by Order No."
               value={searchQuery}
               onChange={handleSearch}
-              style={{ width: "300px" }}
+              style={{ width: "200px" }}
             />
           </Col>
         </Row>

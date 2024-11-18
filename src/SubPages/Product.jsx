@@ -233,7 +233,7 @@ const Product = () => {
                 placeholder="Search by product name"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                style={{ width: 300 }}
+                style={{ width: 200 }}
               />
             </Col>
             <Col>
