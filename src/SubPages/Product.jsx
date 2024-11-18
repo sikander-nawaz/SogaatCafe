@@ -152,17 +152,23 @@ const Product = () => {
     setCurrentProductId(null);
   };
 
+  // useEffect()
   useEffect(() => {
-    fetchCategories();
-    fetchProducts();
+    const initializeData = async () => {
+      await fetchCategories();
+      await fetchProducts();
+      setSelectedCategory(""); // Ensure the placeholder is shown initially
+    };
+    initializeData();
   }, []);
 
+  // frontend table from Ant design
   const columns = [
     {
       title: (
         <Select
           placeholder="Select Category"
-          value={selectedCategory}
+          value={selectedCategory || undefined} // Use undefined to show the placeholder when no value is selected
           onChange={handleCategoryChange}
           style={{ width: "100%" }}
           allowClear
@@ -268,7 +274,7 @@ const Product = () => {
         >
           <Select
             placeholder="Select Category"
-            value={selectedCategory}
+            value={selectedCategory || undefined}
             onChange={(value) => setSelectedCategory(value)}
             style={{ width: "100%", marginBottom: "10px" }}
           >
@@ -278,6 +284,7 @@ const Product = () => {
               </Select.Option>
             ))}
           </Select>
+
           <Input
             type="text"
             value={newProduct}
