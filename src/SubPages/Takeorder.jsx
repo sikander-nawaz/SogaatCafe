@@ -27,6 +27,7 @@ const Takeorder = () => {
   const [searchTerm, setSearchTerm] = useState(""); // state for sesrch
   const [discount, setDiscount] = useState(0); // state for discount
   const [customerAmount, setCustomerAmount] = useState(0); // state for customer amount
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false); // state for button disable.
 
   // generate random ID for order
   let lastGeneratedDate = ""; // Stores the last date in DDMM format
@@ -125,12 +126,13 @@ const Takeorder = () => {
       return;
     }
 
+    setIsPlacingOrder(true); // Disable the button
     const orderNumber = generateOrderNumber();
     const orderData = {
       orderNumber,
       orderType,
       items: selectedProducts,
-      totalPrice, // Only the total price after discount
+      totalPrice: totalAmountAfterDiscount,
       date: new Date().toISOString(),
     };
 
@@ -138,13 +140,55 @@ const Takeorder = () => {
       const orderCollectionRef = collection(db, "Orders");
       await addDoc(orderCollectionRef, orderData);
       message.success(`Order ${orderNumber} placed successfully!`);
+
+      // Generate and print invoice
+      const invoiceContent = `
+        <div>
+          <h3>Invoice</h3>
+          <p><strong>Order Number:</strong> ${orderNumber}</p>
+          <p><strong>Order Date:</strong> ${new Date().toLocaleString()}</p>
+          <p><strong>Order Type:</strong> ${orderType}</p>
+          <table border="1" style="width: 100%; text-align: left;">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${selectedProducts
+                .map(
+                  (item) => `
+                <tr>
+                  <td>${item.product}</td>
+                  <td>${item.quantity}</td>
+                  <td>${item.price * item.quantity} RS</td>
+                </tr>`
+                )
+                .join("")}
+            </tbody>
+          </table>
+          <p><strong>Total:</strong> ${totalAmountAfterDiscount.toFixed(
+            2
+          )} RS</p>
+        </div>
+      `;
+      const printWindow = window.open("", "_blank");
+      printWindow.document.write(invoiceContent);
+      printWindow.document.close();
+      printWindow.print();
+
+      // Reset states
       setSelectedProducts([]);
       setTotalPrice(0);
       setOrderType("");
-      setDiscount(0); // Reset discount after order is placed
-      setCustomerAmount(0); // Reset customer amount after order is placed
+      setDiscount(0);
+      setCustomerAmount(0);
     } catch (error) {
       message.error("Failed to place the order. Please try again.");
+    } finally {
+      setIsPlacingOrder(false); // Enable the button
     }
   };
 
@@ -379,6 +423,7 @@ const Takeorder = () => {
           <Button
             type="primary"
             onClick={placeOrder}
+            disabled={isPlacingOrder}
             style={{ width: "100%", marginTop: "10px" }}
           >
             Place Order
