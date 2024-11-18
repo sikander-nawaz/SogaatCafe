@@ -154,7 +154,11 @@ const Orders = () => {
             onClick={() => viewOrder(record)}
             style={{ marginRight: "8px" }}
           />
-          <Button icon={<EditOutlined />} onClick={() => editOrder(record)} />
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => editOrder(record)}
+            style={{ marginRight: "8px" }}
+          />
           {location.pathname === "/dashboard" && ( // Show Delete button only on Dashboard route
             <Button
               icon={<DeleteOutlined />}
