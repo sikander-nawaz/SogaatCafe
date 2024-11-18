@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaHome, FaList, FaBox, FaBars } from "react-icons/fa";
-import {  UserOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { Dropdown, Space, Menu, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -79,7 +79,7 @@ const UserSidebar = () => {
       <div className="main-content">
         <div
           className="header d-flex justify-content-end"
-          style={{ position: "absolute", zIndex: "2", marginLeft: "980px" }}
+          style={{ zIndex: "2", marginLeft: "980px" }}
         >
           <Dropdown overlay={<Menu items={items} />} trigger={["click"]}>
             <Avatar
