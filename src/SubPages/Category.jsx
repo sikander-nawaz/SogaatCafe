@@ -154,7 +154,8 @@ const Category = () => {
     <>
       <div
         style={{
-          padding: "10px 20px",
+          marginTop: "-52px",
+          padding: "10px",
           backgroundColor: "#f0f2f5",
           borderBottom: "1px solid #d9d9d9",
         }}
@@ -163,7 +164,7 @@ const Category = () => {
           justify="space-between"
           align="middle"
           style={{
-            paddingRight: "71px",
+            paddingRight: "56px",
           }}
         >
           <Col>
