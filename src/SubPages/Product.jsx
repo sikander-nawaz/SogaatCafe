@@ -263,7 +263,7 @@ const Product = () => {
 
         <Modal
           title={currentProductId ? "Update Product" : "Add New Product"}
-          visible={isModalVisible}
+          open={isModalVisible}
           onOk={currentProductId ? updateProduct : addProduct}
           onCancel={resetModal}
           okButtonProps={{
