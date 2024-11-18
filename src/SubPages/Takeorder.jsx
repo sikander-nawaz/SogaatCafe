@@ -19,18 +19,36 @@ import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
 const Takeorder = () => {
-  const [categories, setCategories] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [orderType, setOrderType] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [discount, setDiscount] = useState(0); // New state for discount
-  const [customerAmount, setCustomerAmount] = useState(0); // New state for customer amount
+  const [categories, setCategories] = useState([]); // state for fetch categories
+  const [selectedProducts, setSelectedProducts] = useState([]); // state for fetch products
+  const [totalPrice, setTotalPrice] = useState(0); // state for total price
+  const [orderType, setOrderType] = useState(""); // state for order type (dine-in, take away, HD)
+  const [selectedCategory, setSelectedCategory] = useState("All"); // state for see products with category
+  const [searchTerm, setSearchTerm] = useState(""); // state for sesrch
+  const [discount, setDiscount] = useState(0); // state for discount
+  const [customerAmount, setCustomerAmount] = useState(0); // state for customer amount
 
-  const generateOrderNumber = () =>
-    `ORD-${Math.floor(Math.random() * 1000000)}`;
+  // generate random ID for order
+  let lastGeneratedDate = ""; // Stores the last date in DDMM format
+  let orderCounter = 1; // Initialize the counter
+  const generateOrderNumber = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0"); // Format day as DD
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Format month as MM
+    const currentDate = `${day}${month}`; // Combine DD and MM
 
+    // Check if the date has changed
+    if (currentDate !== lastGeneratedDate) {
+      lastGeneratedDate = currentDate; // Update to the current date
+      orderCounter = 1; // Reset the counter
+    }
+
+    const counterPart = String(orderCounter).padStart(2, "0"); // Format counter as 2-digit number
+    orderCounter++; // Increment the counter for the next order
+    return `ORD-${currentDate}${counterPart}`;
+  };
+
+  // fetch categories with products
   const fetchCategoriesWithProducts = async () => {
     const categoryCollectionRef = collection(db, "Category");
     const productCollectionRef = collection(db, "Product");
@@ -100,6 +118,7 @@ const Takeorder = () => {
     setSelectedProducts(updatedProducts);
   };
 
+  // handle order-data to databse.
   const placeOrder = async () => {
     if (!orderType) {
       message.error("Please select an order type.");
@@ -146,7 +165,7 @@ const Takeorder = () => {
   const remainingBalance =
     customerAmount > 0 ? customerAmount - totalAmountAfterDiscount : 0;
 
-  // Adding colomns for table
+  // Adding colomns for billing screen table
   const columns = (updateQuantity, removeProduct) => [
     {
       title: "Product",
@@ -190,6 +209,7 @@ const Takeorder = () => {
     },
   ];
 
+  // Frontend Started
   return (
     <>
       <div
