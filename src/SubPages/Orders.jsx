@@ -176,6 +176,7 @@ const Orders = () => {
     <>
       <div
         style={{
+          marginTop: "-52px",
           padding: "10px 20px",
           backgroundColor: "#f0f2f5",
           borderBottom: "1px solid #d9d9d9",
@@ -185,7 +186,7 @@ const Orders = () => {
           justify="space-between"
           align="middle"
           style={{
-            paddingRight: "69px",
+            paddingRight: "45px",
           }}
         >
           <Col>

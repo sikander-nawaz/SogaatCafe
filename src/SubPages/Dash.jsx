@@ -81,6 +81,7 @@ export default function Dashboard() {
     getOrderTypeData();
   }, [selectedDate, datePickerMode]);
 
+  // data-set for graph
   const data = {
     labels: ["Dine-In", "Home Delivery", "Take Away"],
     datasets: [
@@ -112,6 +113,7 @@ export default function Dashboard() {
     ],
   };
 
+  // graph-scalling
   const options = {
     responsive: true,
     plugins: {
@@ -131,11 +133,13 @@ export default function Dashboard() {
     },
   };
 
+  //frontend started
   return (
     <div className="container">
       <div
         style={{
-          padding: "10px 20px",
+          marginTop: "-52px",
+          padding: "10px",
           backgroundColor: "#f0f2f5",
           borderBottom: "1px solid #d9d9d9",
         }}
@@ -150,7 +154,7 @@ export default function Dashboard() {
             <Row
               gutter={16}
               style={{
-                paddingRight: "60px",
+                marginRight: "36px",
               }}
             >
               {location.pathname === "/dashboard" && (
