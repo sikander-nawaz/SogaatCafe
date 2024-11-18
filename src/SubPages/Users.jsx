@@ -146,13 +146,11 @@ const Users = () => {
       render: (_, record) => (
         <>
           <Button
-            type="primary"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
             style={{ marginRight: "8px" }}
           />
           <Button
-            type="primary"
             icon={<DeleteOutlined />}
             danger
             loading={isDeleting}
