@@ -175,9 +175,9 @@ const Takeorder = () => {
       ),
     },
     {
-      title: "Action",
+      title: "",
       key: "action",
-      width: 60,
+      width: 33,
       render: (_, record, index) => (
         <Button
           type="text"
@@ -268,7 +268,7 @@ const Takeorder = () => {
         {/* Bill Screen */}
         <div
           style={{
-            width: "300px",
+            width: "310px",
             padding: " 10px 20px",
             background: "#f7f7f7",
           }}
@@ -282,7 +282,7 @@ const Takeorder = () => {
             columns={columns(updateQuantity, removeProduct)}
             pagination={false} // Disable pagination
             size="small" // Compact table style
-            // scroll={{ y: 300 }} // Enable horizontal scrolling
+            scroll={{ y: 170 }} // Enable horizontal scrolling
             style={{ width: "100%" }}
           />
 
