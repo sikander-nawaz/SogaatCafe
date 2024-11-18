@@ -26,7 +26,6 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useLocation } from "react-router-dom"; // Import useLocation
-import Image from "../Assets/Images/logo.png";
 
 const { Title } = Typography;
 
@@ -75,11 +74,6 @@ const Orders = () => {
     message.success("Order deleted successfully!");
     fetchOrders();
     setIsDeleting(false);
-  };
-
-  // Print the modal content
-  const handlePrint = () => {
-    window.print();
   };
 
   const viewOrder = (order) => {
@@ -222,9 +216,6 @@ const Orders = () => {
           visible={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={[
-            // <Button key="print" type="primary" onClick={handlePrint}>
-            //   Print
-            // </Button>,
             <Button key="close" onClick={() => setIsModalVisible(false)}>
               Close
             </Button>,
@@ -232,9 +223,6 @@ const Orders = () => {
         >
           {currentOrder && (
             <div>
-              {/* <Title level={4} style={{ textAlign: "center" }}>
-                Bill
-              </Title> */}
               <Flex
                 justify="space-between"
                 align="center"
@@ -253,14 +241,6 @@ const Orders = () => {
                 </div>
               </Flex>
 
-              {/* <img
-                src={Image}
-                alt=""
-                width={120}
-                height={130}
-                className="d-block mx-auto"
-                style={{ objectFit: "cover", borderRadius: "10px" }}
-              /> */}
               <Table
                 dataSource={currentOrder.items}
                 pagination={false}
@@ -294,11 +274,6 @@ const Orders = () => {
                 <Text strong>Total Amount:</Text>{" "}
                 <Text>{currentOrder.totalPrice} RS</Text>
               </div>
-
-              {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
-                <Text strong>Order No.:</Text>
-                <Text>{currentOrder.orderNumber}</Text>
-              </div> */}
             </div>
           )}
         </Modal>
