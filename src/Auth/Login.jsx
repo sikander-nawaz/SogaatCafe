@@ -99,7 +99,7 @@ const Login = () => {
         >
           <img
             src={Image}
-            alt=""
+            alt="logo"
             width={170}
             height={180}
             className="d-block mx-auto mb-4"

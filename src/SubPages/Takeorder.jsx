@@ -15,6 +15,7 @@ import {
   Radio,
 } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+// import logo from "../Assets/Images/logo.png";
 
 const { Title } = Typography;
 
@@ -143,37 +144,64 @@ const Takeorder = () => {
 
       // Generate and print invoice
       const invoiceContent = `
-        <div>
-          <h3>Order Invoice</h3>
-          <p><strong>Order Number:</strong> ${orderNumber}</p>
-          <p><strong>Order Date:</strong> ${new Date().toLocaleString()}</p>
-          <p><strong>Order Type:</strong> ${orderType}</p>
-          <table border="1" style="width: 100%; text-align: left;">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${selectedProducts
-                .map(
-                  (item) => `
-                <tr>
-                  <td>${item.product}</td>
-                  <td>${item.quantity}</td>
-                  <td>${item.price * item.quantity} RS</td>
-                </tr>`
-                )
-                .join("")}
-            </tbody>
-          </table>
-          <p><strong>Total:</strong> ${totalAmountAfterDiscount.toFixed(
-            2
-          )} RS</p>
+      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+        
+        <!-- Logo Section -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://drive.google.com/uc?id=1JH4yoSMLV9o4LjxRXkAKueidWVJqbH4F" alt="Company Logo" style="max-width: 150px; margin-bottom: 10px;" />
+          <h2 style="margin: 0; color: #1677FF;">Sogaat Flavour Food</h2>
         </div>
-      `;
+        
+        <!-- Header Section -->
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"> 
+          <p style="margin: 0;"><strong>Order Date:</strong> ${new Date().toLocaleString()}</p>
+          <p style="margin: 0;"><strong>Order Number:</strong> ${orderNumber}</p>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;"> 
+          <p style="margin: 0;"><strong>Order Type:</strong> ${orderType}</p>
+          <p style="margin: 0;"><strong>Total:</strong> <span style="color: #1677FF;">${totalAmountAfterDiscount.toFixed(
+            2
+          )} RS</span></p>
+        </div>
+        
+        <!-- Table Section -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <thead>
+            <tr style="background-color: #f4f4f4; text-align: left; border-bottom: 2px solid #ddd;">
+              <th style="padding: 10px; border: 1px solid #ddd;">Item</th>
+              <th style="padding: 10px; border: 1px solid #ddd;">Quantity</th>
+              <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${selectedProducts
+              .map(
+                (item) => `
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  item.product
+                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${
+                  item.quantity
+                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${(
+                  item.price * item.quantity
+                ).toFixed(2)} RS</td>
+              </tr>`
+              )
+              .join("")}
+          </tbody>
+        </table>
+        
+        <!-- Footer Section -->
+        <div style="margin-top: 20px; text-align: center;">
+          <p style="margin: 0; font-size: 0.9em; color: #666;">Thank you for your order!</p>
+          <p style="margin: 0; font-size: 0.9em; color: #666;">If you have any questions, please contact us at <a href="mailto:support@yourcompany.com" style="color: #1677FF;">support@yourcompany.com</a>.</p>
+        </div>
+      </div>
+    `;
+
       const printWindow = window.open("", "_blank");
       printWindow.document.write(invoiceContent);
       printWindow.document.close();
@@ -258,7 +286,8 @@ const Takeorder = () => {
     <>
       <div
         style={{
-          padding: "10px 20px",
+          marginTop: "-52px",
+          padding: "10px",
           backgroundColor: "#f0f2f5",
           borderBottom: "1px solid #d9d9d9",
         }}
