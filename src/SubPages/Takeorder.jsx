@@ -302,7 +302,7 @@ const Takeorder = () => {
             columns={columns(updateQuantity, removeProduct)}
             pagination={false} // Disable pagination
             size="small" // Compact table style
-            scroll={{ y: 170 }} // Enable horizontal scrolling
+            scroll={{ y: 170 }} // Enable vertically scrolling
             style={{ width: "100%" }}
           />
 

@@ -286,7 +286,7 @@ const Orders = () => {
                     width: 100,
                   },
                 ]}
-                scroll={{ y: 200 }} // Enable horizontal scrolling
+                scroll={{ y: 200 }} // Enable vertically scrolling
               />
 
               <div style={{ marginTop: "10px" }}>
