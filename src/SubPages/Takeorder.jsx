@@ -144,7 +144,7 @@ const Takeorder = () => {
       // Generate and print invoice
       const invoiceContent = `
         <div>
-          <h3>Invoice</h3>
+          <h3>Order Invoice</h3>
           <p><strong>Order Number:</strong> ${orderNumber}</p>
           <p><strong>Order Date:</strong> ${new Date().toLocaleString()}</p>
           <p><strong>Order Type:</strong> ${orderType}</p>

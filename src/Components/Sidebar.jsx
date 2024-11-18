@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
   FaHome,
-  FaList,
-  FaBox,
   FaChartLine,
   FaUsers,
   FaBars,
+  FaClipboardList,
+  FaHistory,
 } from "react-icons/fa";
+import { AiFillProduct } from "react-icons/ai";
+import { MdCategory } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Dropdown, Space, Menu, Modal, Input, message, Avatar } from "antd";
@@ -119,7 +121,7 @@ const Sidebar = () => {
         return <Product />;
       case "SalesReport":
         return <SalesReport />;
-      case "TakeOrder":
+      case "Take Order":
         return <Takeorder />;
       default:
         return <Dash />;
@@ -141,10 +143,10 @@ const Sidebar = () => {
         <div className="menu">
           {[
             { label: "Dashboard", icon: <FaHome /> },
-            { label: "Orders", icon: <FaList /> },
-            { label: "TakeOrder", icon: <FaBox /> },
-            { label: "Category", icon: <FaBox /> },
-            { label: "Product", icon: <FaBox /> },
+            { label: "Orders", icon: <FaHistory /> },
+            { label: "Take Order", icon: <FaClipboardList /> },
+            { label: "Category", icon: <MdCategory /> },
+            { label: "Product", icon: <AiFillProduct /> },
             { label: "SalesReport", icon: <FaChartLine /> },
             { label: "Users", icon: <FaUsers /> },
           ].map((item, index) => (
