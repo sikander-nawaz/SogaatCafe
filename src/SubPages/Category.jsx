@@ -136,12 +136,11 @@ const Category = () => {
       render: (_, record) => (
         <>
           <Button
-            type="link"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
+            style={{ marginRight: "8px" }}
           />
           <Button
-            type="link"
             danger
             icon={<DeleteOutlined />}
             onClick={() => deleteCategory(record.id)}

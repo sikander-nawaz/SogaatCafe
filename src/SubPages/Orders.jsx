@@ -17,6 +17,7 @@ import {
   Row,
   Col,
   Form,
+  Flex,
 } from "antd";
 import {
   EyeOutlined,
@@ -195,7 +196,7 @@ const Orders = () => {
           <Col>
             <Input
               prefix={<SearchOutlined />}
-              placeholder="Search by Order No., Type, or Total Price"
+              placeholder="Search by Order No."
               value={searchQuery}
               onChange={handleSearch}
               style={{ width: "300px" }}
@@ -220,9 +221,9 @@ const Orders = () => {
           visible={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={[
-            <Button key="print" type="primary" onClick={handlePrint}>
-              Print
-            </Button>,
+            // <Button key="print" type="primary" onClick={handlePrint}>
+            //   Print
+            // </Button>,
             <Button key="close" onClick={() => setIsModalVisible(false)}>
               Close
             </Button>,
@@ -230,20 +231,35 @@ const Orders = () => {
         >
           {currentOrder && (
             <div>
-              <Title level={4} style={{ textAlign: "center" }}>
+              {/* <Title level={4} style={{ textAlign: "center" }}>
                 Bill
-              </Title>
-              <Text>
-                <strong>Date:</strong> {currentOrder.date}
-              </Text>
-              <img
+              </Title> */}
+              <Flex
+                justify="space-between"
+                align="center"
+                style={{ marginTop: "10px" }}
+              >
+                <div>
+                  <Text>
+                    <strong>Date:</strong> {currentOrder.date}
+                  </Text>
+                </div>
+
+                <div>
+                  <Text>
+                    <strong>Order No.:</strong> {currentOrder.orderNumber}
+                  </Text>
+                </div>
+              </Flex>
+
+              {/* <img
                 src={Image}
                 alt=""
                 width={120}
                 height={130}
                 className="d-block mx-auto"
                 style={{ objectFit: "cover", borderRadius: "10px" }}
-              />
+              /> */}
               <Table
                 dataSource={currentOrder.items}
                 pagination={false}
@@ -272,15 +288,15 @@ const Orders = () => {
                 ]}
               />
 
-              <div style={{ textAlign: "right", marginTop: "10px" }}>
+              <div style={{ marginTop: "10px" }}>
                 <Text strong>Total Amount:</Text>{" "}
                 <Text>{currentOrder.totalPrice} RS</Text>
               </div>
 
-              <div style={{ textAlign: "center", marginTop: "20px" }}>
-                <Text strong>Order No.:</Text>{" "}
+              {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
+                <Text strong>Order No.:</Text>
                 <Text>{currentOrder.orderNumber}</Text>
-              </div>
+              </div> */}
             </div>
           )}
         </Modal>
