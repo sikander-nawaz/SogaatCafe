@@ -31,23 +31,8 @@ const Takeorder = () => {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false); // state for button disable.
 
   // generate random ID for order
-  let lastGeneratedDate = ""; // Stores the last date in DDMM format
-  let orderCounter = 1; // Initialize the counter
   const generateOrderNumber = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0"); // Format day as DD
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // Format month as MM
-    const currentDate = `${day}${month}`; // Combine DD and MM
-
-    // Check if the date has changed
-    if (currentDate !== lastGeneratedDate) {
-      lastGeneratedDate = currentDate; // Update to the current date
-      orderCounter = 1; // Reset the counter
-    }
-
-    const counterPart = String(orderCounter).padStart(2, "0"); // Format counter as 2-digit number
-    orderCounter++; // Increment the counter for the next order
-    return `ORD-${currentDate}${counterPart}`;
+    return `ORD-${Math.floor(100000 + Math.random() * 900000).toString()}`;
   };
 
   // fetch categories with products
