@@ -133,7 +133,7 @@ const Login = () => {
                 onClick={() => setPasswordVisible(!passwordVisible)}
                 style={{ cursor: "pointer" }}
               >
-                {passwordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                {passwordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
               </span>
             </div>
             <div className="mb-3 d-flex justify-content-end">
