@@ -155,6 +155,7 @@ export default function Dashboard() {
               gutter={16}
               style={{
                 marginRight: "36px",
+                zIndex: "3",
               }}
             >
               {location.pathname === "/dashboard" && (
