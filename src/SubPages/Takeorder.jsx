@@ -294,7 +294,7 @@ const Takeorder = () => {
               placeholder="Search Product"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: 200 }}
+              style={{ width: 200, zIndex: "3" }}
             />
           </Col>
         </Row>
