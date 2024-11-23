@@ -195,7 +195,11 @@ const Users = () => {
                 />
               </Col>
               <Col>
-                <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                <Button
+                  type="primary"
+                  onClick={() => setIsModalVisible(true)}
+                  style={{ zIndex: "3" }}
+                >
                   Add User
                 </Button>
               </Col>
