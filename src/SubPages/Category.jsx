@@ -180,7 +180,7 @@ const Category = () => {
                   placeholder="Search Category"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ width: "200px" }}
+                  style={{ width: "200px", zIndex: "3" }}
                 />
               </Col>
               <Col>
