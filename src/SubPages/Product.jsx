@@ -244,7 +244,11 @@ const Product = () => {
               />
             </Col>
             <Col>
-              <Button type="primary" onClick={() => setIsModalVisible(true)}>
+              <Button
+                type="primary"
+                onClick={() => setIsModalVisible(true)}
+                style={{ zIndex: "3" }}
+              >
                 Add Product
               </Button>
             </Col>
