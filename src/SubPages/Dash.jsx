@@ -162,7 +162,7 @@ export default function Dashboard() {
                 <Col>
                   <Select
                     defaultValue="month"
-                    style={{ width: 120 }}
+                    style={{ width: 120, zIndex: "3" }}
                     onChange={(value) => setDatePickerMode(value)}
                   >
                     <Select.Option value="month">Month</Select.Option>
@@ -172,6 +172,7 @@ export default function Dashboard() {
               )}
               <Col>
                 <DatePicker
+                  style={{ zIndex: "3" }}
                   picker={datePickerMode}
                   onChange={(date) => setSelectedDate(date)}
                   placeholder={`Select ${
