@@ -42,7 +42,7 @@ const SubNavbar = ({ title, onMonthChange, onExport }) => {
               />
             </Col>
             <Col>
-              <Button type="primary" onClick={onExport}>
+              <Button type="primary" onClick={onExport} style={{ zIndex: "3" }}>
                 Export
               </Button>
             </Col>
