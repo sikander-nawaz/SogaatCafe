@@ -15,7 +15,8 @@ import {
   Radio,
 } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-// import logo from "../Assets/Images/logo.png";
+const logo = require("../assets/images/logo.png");
+
 
 const { Title } = Typography;
 
@@ -133,7 +134,7 @@ const Takeorder = () => {
         
         <!-- Logo Section -->
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://drive.google.com/uc?id=1JH4yoSMLV9o4LjxRXkAKueidWVJqbH4F" alt="Company Logo" style="max-width: 150px; margin-bottom: 10px;" />
+          <img src="https://github.com/Arhamansari27/JavaScript/blob/main/logo.png?raw=true" alt="Company Logo" style="max-width: 150px; margin-bottom: 10px;" />
           <h2 style="margin: 0; color: #1677FF;">Sogaat Flavour Food</h2>
         </div>
         
