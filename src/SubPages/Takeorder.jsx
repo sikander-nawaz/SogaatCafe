@@ -15,8 +15,7 @@ import {
   Radio,
 } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-const logo = require("../assets/images/logo.png");
-
+const companyLogo = require("../Assets/Images/logo.png");
 
 const { Title } = Typography;
 
@@ -128,13 +127,27 @@ const Takeorder = () => {
       await addDoc(orderCollectionRef, orderData);
       message.success(`Order ${orderNumber} placed successfully!`);
 
+      // Ensure the company logo is loaded
+      const loadImage = async (src) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(src);
+          img.onerror = (err) =>
+            reject(new Error(`Failed to load image: ${src}`));
+          img.src = src;
+        });
+      };
+
+      // Wait for the logo to load
+      await loadImage(companyLogo);
+
       // Generate and print invoice
       const invoiceContent = `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
         
         <!-- Logo Section -->
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://github.com/Arhamansari27/JavaScript/blob/main/logo.png?raw=true" alt="Company Logo" style="max-width: 150px; margin-bottom: 10px;" />
+          <img src=${companyLogo} alt="Company Logo" style="max-width: 150px; margin-bottom: 10px;" />
           <h2 style="margin: 0; color: #1677FF;">Sogaat Flavour Food</h2>
         </div>
         
@@ -183,15 +196,26 @@ const Takeorder = () => {
         <!-- Footer Section -->
         <div style="margin-top: 20px; text-align: center;">
           <p style="margin: 0; font-size: 0.9em; color: #666;">Thank you for your order!</p>
-          <p style="margin: 0; font-size: 0.9em; color: #666;">If you have any questions, please contact us at <a href="mailto:support@yourcompany.com" style="color: #1677FF;">support@yourcompany.com</a>.</p>
+          <p style="margin: 0; font-size: 0.9em; color: #666;">If you have any questions, please contact us at <a href="" style="color: #1677FF;">+92 313 xxxxxxx</a>.</p>
         </div>
       </div>
     `;
 
+      // Open print window
       const printWindow = window.open("", "_blank");
-      printWindow.document.write(invoiceContent);
-      printWindow.document.close();
-      printWindow.print();
+
+      if (printWindow) {
+        printWindow.document.write(invoiceContent);
+        printWindow.document.close();
+
+        // Wait for the image to load in the print window
+        printWindow.onload = () => {
+          printWindow.print();
+        };
+      } else {
+        console.error("Failed to open print window.");
+        message.error("Could not open the print window.");
+      }
 
       // Reset states
       setSelectedProducts([]);
@@ -362,7 +386,6 @@ const Takeorder = () => {
             pagination={false} // Disable pagination
             size="small" // Compact table style
             scroll={{ y: 170 }} // Enable vertically scrolling
-            style={{ width: "100%" }}
           />
 
           {/* Input tags for amount. */}
